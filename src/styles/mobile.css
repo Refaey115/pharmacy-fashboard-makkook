@@ -1,0 +1,237 @@
+/* ============================================================
+   mobile.css — responsive overrides for makkook-pharmacy-dashboard
+   This file only activates on screens narrower than 768px.
+   It does not change any desktop behaviour.
+   ============================================================ */
+
+/* ── Sidebar → bottom tab bar on mobile ── */
+@media (max-width: 768px) {
+
+  /* Turn the flex-row shell into a flex-column */
+  .dashboard-shell {
+    flex-direction: column;
+  }
+
+  /* Sidebar becomes a horizontal bottom nav */
+  aside {
+    width: 100% !important;
+    min-width: unset !important;
+    height: auto !important;
+    flex-direction: row !important;
+    border-right: none !important;
+    border-top: 1px solid var(--border) !important;
+    order: 2; /* push to bottom */
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+  aside::-webkit-scrollbar { display: none; }
+
+  /* Hide brand, AI status, clock and footer on mobile — not enough space */
+  aside > div:first-child,  /* brand */
+  aside > div:nth-child(2), /* AI status */
+  aside > div:last-child    /* footer */
+  { display: none !important; }
+
+  /* Nav becomes horizontal scrollable row */
+  aside nav {
+    flex-direction: row !important;
+    flex: 1;
+    padding: 0 !important;
+    gap: 0 !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  aside nav::-webkit-scrollbar { display: none; }
+
+  /* Nav items become compact tabs */
+  aside nav a {
+    padding: 12px 14px !important;
+    font-size: 12px !important;
+    border-left: none !important;
+    border-top: 3px solid transparent !important;
+    border-radius: 0 !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Active item — top border instead of left border */
+  aside nav a[class*="active"] {
+    border-top-color: var(--accent) !important;
+    border-left-color: transparent !important;
+  }
+
+  /* Main content area fills remaining height */
+  .main-area {
+    flex: 1;
+    order: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Scrollable content */
+  .panel-scroll {
+    padding: 16px !important;
+  }
+
+  /* ── LiveAiBar — smaller on mobile ── */
+  .main-area > div:first-child {
+    font-size: 10px;
+  }
+}
+
+/* ── Login page ── */
+@media (max-width: 768px) {
+  /* Stack the two-column login page vertically */
+  [class*="LoginPage_page"],
+  [class*="page_"] {
+    flex-direction: column !important;
+  }
+
+  /* Hide the hero left column on small screens */
+  [class*="LoginPage_hero"],
+  [class*="hero_"] {
+    display: none !important;
+  }
+
+  /* Form column takes full width */
+  [class*="LoginPage_formCol"],
+  [class*="formCol_"] {
+    width: 100% !important;
+    border-left: none !important;
+    padding: 32px 20px !important;
+    min-height: 100vh;
+  }
+}
+
+/* ── KPI grid — single column on mobile ── */
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-5 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── All panel pages — full-width layout fixes ── */
+@media (max-width: 768px) {
+
+  /* Any 2 or 3 column grid layout inside panels */
+  [class*="chartsRow"],
+  [class*="briefRow"],
+  [class*="optimizeLayout"],
+  [class*="branchLayout"],
+  [class*="overstockLayout"],
+  [class*="statsRow"],
+  [class*="kpiRow"],
+  [class*="scopeRow"],
+  [class*="formGrid"],
+  [class*="poTableHead"],
+  [class*="emergFormGrid"] {
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+  }
+
+  /* PO table — hide header row, show data as stacked rows */
+  [class*="poTableHead"] {
+    display: none !important;
+  }
+
+  [class*="poRow"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    padding: 12px !important;
+  }
+
+  /* Pipeline steps — allow wrapping */
+  [class*="pipelineSteps"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* Sub-tabs in Control Center — horizontal scroll */
+  [class*="subTabs"] {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+  }
+  [class*="subTabs"]::-webkit-scrollbar { display: none; }
+
+  [class*="subTab"] {
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+  }
+
+  /* Stat cards — wrap into 2 cols */
+  [class*="kpiRow"],
+  [class*="statsRow"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Filter rows — wrap */
+  [class*="filterRow"],
+  [class*="poStats"],
+  [class*="presets"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* Chart heights — shorter on mobile */
+  [class*="chartWrap"] {
+    height: 160px !important;
+  }
+
+  [class*="radarWrap"] {
+    height: 220px !important;
+  }
+
+  /* Impact grid — single column */
+  [class*="impactGrid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Branch cards — single column */
+  [class*="branchCards"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tables with fixed columns */
+  [class*="feed"],
+  [class*="poTable"] {
+    font-size: 11px !important;
+  }
+
+  /* Large headings */
+  [class*="pageTitle"],
+  [class*="title"] {
+    font-size: 15px !important;
+  }
+
+  /* Hero banner stats wrap */
+  .hero-stats {
+    gap: 16px !important;
+  }
+
+  .hero-stat-val {
+    font-size: 18px !important;
+  }
+}
+
+/* ── Tablet (768–1024px) — two column where three is too tight ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  [class*="optimizeLayout"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  [class*="briefRow"],
+  [class*="chartsRow"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  [class*="branchCards"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .panel-scroll {
+    padding: 18px !important;
+  }
+}
