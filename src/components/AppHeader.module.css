@@ -1,0 +1,183 @@
+.header {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── Top row ── */
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logoAdmin {
+  height: 36px;
+  object-fit: contain;
+}
+
+.clientBrandWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.elezabyBox {
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  display: inline-flex;
+}
+
+.logoClient {
+  height: 26px;
+  object-fit: contain;
+}
+
+.poweredBy {
+  font-size: 9.5px;
+  color: var(--text-3);
+  letter-spacing: 0.3px;
+}
+
+.poweredBy span {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* AI Pulse indicator */
+.aiPulse {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.2);
+  border-radius: 20px;
+}
+
+.pulseDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74,222,128,0.5); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 5px rgba(74,222,128,0); }
+}
+
+.pulseLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ok);
+  letter-spacing: 0.3px;
+}
+
+.time {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.logoutBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: var(--text-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all var(--transition);
+}
+
+.logoutBtn:hover {
+  color: var(--err);
+  border-color: rgba(248,113,113,0.3);
+  background: rgba(248,113,113,0.06);
+}
+
+/* ── Tab row ── */
+.tabRow {
+  padding: 0 16px;
+  overflow: hidden;
+}
+
+.tabScroll {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 8px;
+}
+
+.tabScroll::-webkit-scrollbar { display: none; }
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-3);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.tab:hover {
+  color: var(--text-2);
+}
+
+.tabActive {
+  color: var(--text) !important;
+  border-bottom-color: var(--accent) !important;
+}
+
+.tabIcon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.tabBadge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+.badgeNew  { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(225,84,29,0.2); }
+.badgeLive { background: rgba(74,222,128,0.12); color: var(--ok); border: 1px solid rgba(74,222,128,0.25); animation: liveBlink 2s ease infinite; }
+.badgeAi   { background: rgba(96,165,250,0.12); color: var(--info); border: 1px solid rgba(96,165,250,0.25); }
+
+@keyframes liveBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}

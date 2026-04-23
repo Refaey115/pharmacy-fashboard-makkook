@@ -1,0 +1,8 @@
+.chartWrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  height: 300px;
+  position: relative;
+}

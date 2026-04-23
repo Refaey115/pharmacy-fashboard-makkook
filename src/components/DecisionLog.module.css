@@ -1,0 +1,71 @@
+.log {
+  max-height: 460px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: background 0.2s ease;
+  animation: fadeSlideIn 0.35s ease both;
+}
+
+.entry:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border);
+}
+
+.flash {
+  animation: fadeSlideIn 0.35s ease both, flashOrange 0.8s ease both;
+}
+
+.iconBox {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(225, 84, 29, 0.25);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  margin-top: 1px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ts {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+
+.text {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.45;
+}
+
+.conf {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.conf strong {
+  color: var(--ok);
+}

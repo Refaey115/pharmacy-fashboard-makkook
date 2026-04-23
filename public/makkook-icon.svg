@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#212121" rx="20"/>
+  <!-- Upper angular building/house shape -->
+  <path d="M100 18 L155 52 L155 108 L133 108 L133 92 L67 92 L67 108 L45 108 L45 52 Z" fill="#E1541D"/>
+  <!-- Inner pill cutout -->
+  <rect x="87" y="36" width="26" height="52" rx="13" fill="#212121"/>
+  <!-- Wave chevrons bottom -->
+  <polyline points="45,124 65,112 83,126 100,115 117,126 135,112 155,124"
+    stroke="#E1541D" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="45,148 65,136 83,150 100,139 117,150 135,136 155,148"
+    stroke="#E1541D" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

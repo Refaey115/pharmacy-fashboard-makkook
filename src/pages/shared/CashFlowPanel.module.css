@@ -1,0 +1,61 @@
+.page{display:flex;flex-direction:column;gap:20px}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px;margin-bottom:5px}
+.sub{font-size:13px;color:var(--text-3);line-height:1.6}
+.livePill{display:flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);color:var(--ok);border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.5px;height:fit-content}
+.liveDot{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,222,128,0.5)}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(74,222,128,0)}}
+
+/* KPI row */
+.kpiRow{display:flex;gap:10px;flex-wrap:wrap}
+.kpiCard{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;min-width:130px;flex:1}
+.kpiIcon{font-size:18px}
+.kpiVal{font-family:var(--font-mono);font-size:19px;font-weight:700}
+.kpiLbl{font-size:11px;color:var(--text-3)}
+
+/* Chart */
+.chartCard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:20px}
+.chartHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.secLabel{font-size:10.5px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px}
+.chartNote{font-size:11px;color:var(--text-3)}
+.chartWrap{height:220px;position:relative}
+
+/* AI log */
+.aiCard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:16px 20px}
+.aiHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.aiTitle{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.7px}
+.aiDot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease-in-out infinite}
+.aiCount{font-size:11px;color:var(--text-3);transition:color 0.3s}
+.aiCountFlash{color:var(--accent)!important}
+.aiList{display:flex;flex-direction:column;gap:4px}
+.aiRow{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:7px;border:1px solid transparent;transition:background var(--transition)}
+.aiRow:hover{background:rgba(255,255,255,0.03);border-color:var(--border)}
+.aiRowNew{animation:flashOrange 0.8s ease;background:rgba(225,84,29,0.06)!important}
+.aiRowIcon{font-size:14px;flex-shrink:0;padding-top:1px}
+.aiRowText{font-size:12.5px;color:var(--text-2);line-height:1.5}
+@keyframes flashOrange{0%{background:rgba(225,84,29,0.18)}100%{background:rgba(225,84,29,0.06)}}
+
+/* PO Section */
+.poSection{display:flex;flex-direction:column;gap:10px}
+.poHeader{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.poHeaderLeft{display:flex;flex-direction:column;gap:8px}
+.poStats{display:flex;gap:6px;flex-wrap:wrap}
+.poStat{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:500;background:var(--surface);border:1px solid var(--border);color:var(--text-3);cursor:pointer;transition:all var(--transition)}
+.poStat:hover{border-color:var(--border-hover)}
+.poStatActive{background:rgba(255,255,255,0.04)!important;border-bottom:2px solid var(--st-color)!important}
+
+.poTable{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);overflow:hidden;max-height:380px;overflow-y:auto}
+.poTableHead{display:grid;grid-template-columns:110px 1fr 80px 100px 70px 110px 50px 110px;gap:10px;padding:10px 14px;font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.6px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
+.poRow{display:grid;grid-template-columns:110px 1fr 80px 100px 70px 110px 50px 110px;gap:10px;padding:9px 14px;font-size:12px;color:var(--text-2);border-bottom:1px solid rgba(255,255,255,0.04);transition:background var(--transition);animation:fadeSlideIn 0.3s ease;align-items:center}
+.poRow:last-child{border-bottom:none}
+.poRow:hover{background:rgba(255,255,255,0.03)}
+.poRowNew{animation:fadeSlideIn 0.3s ease,flashOrange 0.8s ease}
+.poId{font-family:var(--font-mono);font-size:10.5px;color:var(--text-3)}
+.poSupplier{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.poSku{font-family:var(--font-mono);font-size:10.5px;background:var(--surface-2);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--text-3)}
+.poBranch{font-size:11.5px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.poQty{font-family:var(--font-mono);font-size:11.5px}
+.poValue{font-family:var(--font-mono);font-size:11.5px;font-weight:600}
+.poEta{font-size:11.5px;color:var(--text-3)}
+.poStatus{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid;white-space:nowrap}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}

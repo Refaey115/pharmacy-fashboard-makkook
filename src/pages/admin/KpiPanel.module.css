@@ -1,0 +1,80 @@
+.page { display: flex; flex-direction: column; gap: 22px; }
+
+.sectionLabel {
+  font-size: 11px; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.8px;
+}
+
+/* ── Mini trend charts ── */
+.chartsRow {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+@media(max-width:900px){ .chartsRow { grid-template-columns: 1fr; } }
+
+.chartCard {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 16px 18px;
+}
+.chartHeader {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 12px;
+}
+.chartTitle {
+  font-size: 12.5px; font-weight: 600; color: var(--text-2);
+}
+.chartSub {
+  font-size: 11px; color: var(--text-3);
+}
+.chartWrap { height: 130px; position: relative; }
+
+/* ── Briefing row ── */
+.briefRow {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;
+}
+@media(max-width:1200px){ .briefRow { grid-template-columns: 1fr 1fr; } }
+@media(max-width:800px){  .briefRow { grid-template-columns: 1fr; }    }
+
+.briefCard {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.briefTitle {
+  font-size: 11px; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.7px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+
+/* Events */
+.eventList  { display: flex; flex-direction: column; gap: 8px; }
+.eventRow   { display: flex; align-items: flex-start; gap: 10px; }
+.eventDot   { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.eventBody  { display: flex; flex-direction: column; gap: 1px; flex: 1; }
+.eventLabel { font-size: 12.5px; font-weight: 500; color: var(--text-2); }
+.eventDate  { font-size: 10.5px; color: var(--text-3); font-family: var(--font-mono); }
+.eventNote  {
+  font-size: 10px; color: var(--ok); font-weight: 600; white-space: nowrap;
+  align-self: flex-start; margin-top: 2px;
+}
+
+/* SKU list */
+.skuList  { display: flex; flex-direction: column; gap: 8px; }
+.skuRow   { display: flex; align-items: center; gap: 8px; }
+.skuLeft  { display: flex; flex-direction: column; gap: 1px; min-width: 90px; }
+.skuCode  { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+.skuName  { font-size: 11.5px; font-weight: 500; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+.skuBarWrap { flex: 1; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.skuBar   { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.skuScore { font-family: var(--font-mono); font-size: 11px; color: var(--text-3); min-width: 24px; text-align: right; }
+
+/* Recent activity */
+.activityList { display: flex; flex-direction: column; gap: 10px; }
+.activityRow  { display: flex; align-items: flex-start; gap: 10px; }
+.activityDot  {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  flex-shrink: 0; margin-top: 5px;
+}
+.activityBody  { display: flex; flex-direction: column; gap: 2px; }
+.activityTs    { font-family: var(--font-mono); font-size: 10px; color: var(--accent); }
+.activityText  { font-size: 11.5px; color: var(--text-2); line-height: 1.45; }
+.activityConf  { font-size: 10.5px; color: var(--text-3); }
