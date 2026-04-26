@@ -140,3 +140,30 @@
 @media (max-width: 700px) {
   .grid-2, .grid-3, .grid-5 { grid-template-columns: 1fr; }
 }
+
+/* ── Makkook footer ── */
+.makkook-footer {
+  padding: 10px 24px;
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+/* ── Client branding bar ── */
+.client-brand-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  justify-content: flex-end;
+}
+
+.powered-by-text {
+  font-size: 12px;
+  color: var(--text-3);
+}

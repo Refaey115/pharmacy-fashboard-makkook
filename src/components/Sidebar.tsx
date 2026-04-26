@@ -8,14 +8,12 @@ interface NavItem { label: string; path: string }
 
 function buildNav(base: string): NavItem[] {
   return [
-    { label: 'Overview',            path: `${base}/kpi`            },
-    { label: 'Demand Forecast',     path: `${base}/demandforecast` },
-    { label: 'Replenishment Plan',  path: `${base}/replplan`       },
-    { label: 'Purchase Orders',     path: `${base}/purchaseorders` },
-    { label: 'Inventory',           path: `${base}/inventory`      },
-    { label: 'Cash Flow',           path: `${base}/cashflow`       },
-    { label: 'Optimise Strategy',   path: `${base}/optimise`       },
-    { label: 'Decision Log',        path: `${base}/log`            },
+    { label: 'Command Bridge',      path: `${base}/command`      },
+    { label: 'Replenishment',       path: `${base}/replenishment` },
+    { label: 'Network Pulse',       path: `${base}/network`      },
+    { label: 'Margin Engine',       path: `${base}/margin`       },
+    { label: 'Disruption Response', path: `${base}/disruption`   },
+    { label: 'Decision Ledger',     path: `${base}/ledger`       },
   ];
 }
 

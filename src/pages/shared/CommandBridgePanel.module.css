@@ -1,0 +1,338 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero {
+  background: linear-gradient(180deg, #111 0%, #1a1a1a 100%);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 12px;
+  padding: 36px 32px 28px;
+  text-align: center;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.heroNumber {
+  font-size: 72px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.heroLabel {
+  font-size: 14px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+}
+
+.heroSubtext {
+  font-size: 13px;
+  color: var(--text-3);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.kpiCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kpiLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-3);
+}
+
+.kpiValue {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.kpiDelta {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.kpiInsight {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
+.bottomRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.mapCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.mapHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mapCounter {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.mapWrap {
+  width: 100%;
+  height: 280px;
+  background: var(--surface-2);
+  position: relative;
+}
+
+.mapTooltip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--surface);
+  border: 1px solid rgba(225,84,29,0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  pointer-events: none;
+  min-width: 200px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+
+.tooltipName {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.tooltipRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.mapLegend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.legendDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-3);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.seasonList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seasonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.seasonRow:last-child {
+  border-bottom: none;
+}
+
+.seasonName {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1;
+}
+
+.seasonMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.seasonAction {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.skuList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skuRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skuCode {
+  font-size: 11px;
+  color: var(--accent);
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.skuName {
+  font-size: 11px;
+  color: var(--text-2);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skuBarWrap {
+  width: 80px;
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.skuBar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.skuScore {
+  font-size: 11px;
+  color: var(--text-3);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.roiStrip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.roiItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.roiLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-3);
+}
+
+.roiValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.roiDivider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+
+.mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}

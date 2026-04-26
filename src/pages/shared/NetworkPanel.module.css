@@ -1,0 +1,110 @@
+.panel { display: flex; flex-direction: column; gap: 20px; }
+
+.topologyCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cardTitle { font-size: 14px; font-weight: 600; color: var(--text); }
+
+.topoStats { display: flex; gap: 16px; flex-wrap: wrap; }
+.topoStat { font-size: 12px; color: var(--text-3); }
+.topoStat strong { color: var(--accent); }
+
+.topoWrap {
+  background: var(--surface-2);
+  padding: 4px;
+}
+
+@keyframes flowDash {
+  to { stroke-dashoffset: -24; }
+}
+
+.flowLine {
+  stroke: #E1541D;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-dasharray: 8 6;
+  opacity: 0.7;
+  animation: flowDash 1.5s linear infinite;
+}
+
+.flowLineDim {
+  stroke: rgba(225,84,29,0.35);
+  stroke-width: 1;
+  fill: none;
+  stroke-dasharray: 4 4;
+  opacity: 0.5;
+  animation: flowDash 2s linear infinite;
+}
+
+.tableCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tableWrap { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table th {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-3);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--surface-2);
+}
+
+.table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.healthBarWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 80px;
+}
+
+.healthBar {
+  height: 6px;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.chartCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }

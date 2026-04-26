@@ -1,0 +1,151 @@
+.panel { display: flex; flex-direction: column; gap: 20px; }
+
+.chainCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.chainTitle {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-3);
+  margin-bottom: 20px;
+}
+
+.chainNodes {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.chainNodeWrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.chainNode {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-width: 130px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.chainNode.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chainNodeHighlight {
+  border-color: var(--accent) !important;
+  background: rgba(225,84,29,0.08) !important;
+  box-shadow: 0 0 16px rgba(225,84,29,0.3);
+}
+
+.chainNodeLabel {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.chainNodeValue {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.chainNodeHighlight .chainNodeValue { color: var(--accent); }
+
+.chainArrow {
+  font-size: 20px;
+  color: var(--border);
+  padding: 0 6px;
+  transition: color 0.4s ease;
+  flex-shrink: 0;
+}
+
+.chainArrow.arrowVisible { color: var(--accent); }
+
+.baGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.baCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.baTitle {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 14px;
+}
+
+.baRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.baRow:last-child { border-bottom: none; }
+.baLabel { font-size: 12px; color: var(--text-2); }
+.baValue { font-size: 14px; font-weight: 700; }
+
+.chartsRow {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 16px;
+}
+
+.chartCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.chartTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.summaryStrip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.summaryItem { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.summaryLabel { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-3); }
+.summaryValue { font-size: 18px; font-weight: 700; color: var(--accent); }
+.summaryDivider { width: 1px; height: 36px; background: var(--border); }
+
+.mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }

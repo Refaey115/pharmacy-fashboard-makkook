@@ -1,188 +1,303 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { generateDecisions } from '../../data/decisionGen';
+import type { Decision } from '../../data/decisionGen';
+import { SUPPLIERS } from '../../data/suppliers';
+import SpeakerHint from '../../components/SpeakerHint';
 import styles from './ReplenishmentPanel.module.css';
 
-interface RepEvent {
-  id: string; ts: string; sku: string; branch: string;
-  action: string; qty: number; status: 'fired' | 'dispatched' | 'delivered' | 'pending';
-  value: number;
-}
+const PIPELINE_STEPS = ['Demand Signal', 'Reorder Point Hit', 'Supplier Decision', 'PO Generated', 'Dispatch', 'Branch Receipt'];
 
-const SKUS = ['CTZ-500','AMX-250','OMP-20','MET-500','ATR-40','LOS-50','PRD-5','IBU-400','AUG-625','PAR-500','BRF-400','ZIP-500'];
-const BRANCHES = ['Nasr City','Maadi','Zamalek','Heliopolis','Smouha','6th October','Dokki','Mohandessin','New Cairo','Tanta'];
-const SUPPLIERS = ['EIPICO','Sigma Pharma','Kahira Pharma','SEDICO','Pharco B','Al-Debeiky Pharma'];
-const STATUSES: RepEvent['status'][] = ['fired','dispatched','delivered','pending'];
-
-function rand(n: number) { return Math.floor(Math.random() * n); }
-function pick<T>(a: T[]): T { return a[rand(a.length)]; }
-
-function makeEvent(): RepEvent {
-  const actions = [
-    `PO fired to ${pick(SUPPLIERS)}`,
-    `Transfer: ${pick(BRANCHES)} → ${pick(BRANCHES)}`,
-    `Emergency reorder from ${pick(SUPPLIERS)}`,
-    `Replenishment cycle triggered`,
-    `Auto-reorder: demand threshold crossed`,
-  ];
-  const qty = (rand(20) + 1) * 50;
-  return {
-    id: Math.random().toString(36).slice(2),
-    ts: new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),
-    sku: pick(SKUS),
-    branch: pick(BRANCHES),
-    action: pick(actions),
-    qty,
-    status: pick(STATUSES),
-    value: qty * (4 + rand(14)),
-  };
-}
-
-const STATUS_CFG = {
-  fired:      { color: 'var(--accent)', label: 'PO Fired',   icon: '⚡' },
-  dispatched: { color: 'var(--info)',   label: 'Dispatched', icon: '🚚' },
-  delivered:  { color: 'var(--ok)',     label: 'Delivered',  icon: '✓'  },
-  pending:    { color: 'var(--warn)',   label: 'Pending',    icon: '⏳' },
+const STATUS_COLOR: Record<Decision['status'], string> = {
+  'Pending': 'var(--warn)',
+  'Dispatched': 'var(--info)',
+  'Delivered': 'var(--ok)',
+  'Cycle Closed': 'var(--accent)',
 };
 
-const PIPELINE_STEPS = [
-  { label: 'Demand Signal',     icon: '📡', desc: 'AI monitors stock levels, sales velocity & forecasts' },
-  { label: 'Reorder Point Hit', icon: '🎯', desc: 'Threshold crossed → replenishment rule triggered'      },
-  { label: 'Supplier Decision', icon: '🤝', desc: 'Best supplier selected on price, lead time & history'  },
-  { label: 'PO Generated',      icon: '📋', desc: 'Purchase order auto-filed and confirmed in < 2 min'    },
-  { label: 'Dispatch',          icon: '🚚', desc: 'Item picked, packed and dispatched to branch'          },
-  { label: 'Branch Receipt',    icon: '🏪', desc: 'Stock updated in real time on arrival scan'            },
-];
+const TYPE_COLORS: Record<string, string> = {
+  'transfer': 'var(--info)',
+  'bulk-po': 'var(--accent)',
+  'shelf-life': 'var(--warn)',
+  'cash-flow': 'var(--ok)',
+  'seasonal': '#a78bfa',
+  'demand-spike': 'var(--err)',
+  'rebalance': 'var(--info)',
+  'cycle-close': 'var(--ok)',
+};
 
 export default function ReplenishmentPanel() {
-  const [events, setEvents] = useState<RepEvent[]>(() => Array.from({length:12},makeEvent));
-  const [newId, setNewId]   = useState<string|null>(null);
-  const [activeStep, setActiveStep] = useState(0);
-  const [filter, setFilter] = useState<'all'|RepEvent['status']>('all');
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [running, setRunning] = useState(false);
+  const [cycleComplete, setCycleComplete] = useState(false);
+  const [pipelineStep, setPipelineStep] = useState(-1);
+  const [evalCount, setEvalCount] = useState(0);
+  const [salesCycleDisplay, setSalesCycleDisplay] = useState(4.2);
+  const [marginDisplay, setMarginDisplay] = useState(38.4);
+  const [showFinancial, setShowFinancial] = useState(false);
+  const [showFootnote, setShowFootnote] = useState(false);
+  const [feed, setFeed] = useState<Decision[]>([]);
+  const [feedFilter, setFeedFilter] = useState('All');
 
-  // Inject new events every 3.5s
+  const feedSeedRef = useRef(30);
+
   useEffect(() => {
-    const t = setInterval(() => {
-      const e = makeEvent();
-      setNewId(e.id);
-      setEvents(prev => [e,...prev].slice(0,50));
-      setTimeout(()=>setNewId(null),800);
-    }, 3500);
-    return () => clearInterval(t);
+    setFeed(generateDecisions(30));
+    const iv = setInterval(() => {
+      feedSeedRef.current++;
+      setFeed(prev => {
+        const newEntry = generateDecisions(1, feedSeedRef.current * 100)[0];
+        return [newEntry, ...prev].slice(0, 80);
+      });
+    }, 2500);
+    return () => clearInterval(iv);
   }, []);
 
-  // Animate pipeline step every 2s
-  useEffect(() => {
-    const t = setInterval(() => setActiveStep(s => (s+1) % PIPELINE_STEPS.length), 2000);
-    return () => clearInterval(t);
-  }, []);
+  const handleRun = useCallback(() => {
+    if (running) return;
+    setRunning(true);
+    setCycleComplete(false);
+    setShowFinancial(false);
+    setShowFootnote(false);
+    setSalesCycleDisplay(4.2);
+    setMarginDisplay(38.4);
+    setEvalCount(0);
+    setPipelineStep(0);
 
-  const totals = {
-    fired:      events.filter(e=>e.status==='fired').length,
-    dispatched: events.filter(e=>e.status==='dispatched').length,
-    delivered:  events.filter(e=>e.status==='delivered').length,
-    pending:    events.filter(e=>e.status==='pending').length,
-  };
+    [0, 1, 2, 3, 4, 5].forEach(step => {
+      setTimeout(() => setPipelineStep(step), 400 + step * 300);
+    });
 
-  const filtered = filter === 'all' ? events : events.filter(e=>e.status===filter);
-  const totalValue = events.reduce((s,e)=>s+e.value,0);
+    const counterStart = 400;
+    const counterDuration = 1800;
+    const counterTarget = 35124847;
+    const startTime = Date.now() + counterStart;
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 0) { setTimeout(tick, 50); return; }
+      const progress = Math.min(elapsed / counterDuration, 1);
+      setEvalCount(Math.floor(progress * counterTarget));
+      if (progress < 1) setTimeout(tick, 50);
+      else setEvalCount(counterTarget);
+    };
+    setTimeout(tick, counterStart);
+
+    setTimeout(() => {
+      setCycleComplete(true);
+      setPipelineStep(6);
+    }, 2200);
+
+    setTimeout(() => {
+      setShowFinancial(true);
+      const animStart = Date.now();
+      const animDur = 1500;
+      const tickFin = () => {
+        const prog = Math.min((Date.now() - animStart) / animDur, 1);
+        setSalesCycleDisplay(parseFloat((4.2 - prog * 0.3).toFixed(2)));
+        setMarginDisplay(parseFloat((38.4 + prog * 0.8).toFixed(1)));
+        if (prog < 1) setTimeout(tickFin, 30);
+      };
+      tickFin();
+    }, 3800);
+
+    setTimeout(() => setShowFootnote(true), 5800);
+    setTimeout(() => setRunning(false), 7500);
+  }, [running]);
+
+  const allTypes = ['All', 'transfer', 'bulk-po', 'shelf-life', 'cash-flow', 'seasonal', 'demand-spike', 'rebalance', 'cycle-close'];
+  const filteredFeed = feedFilter === 'All' ? feed : feed.filter(d => d.type === feedFilter);
+
+  const topSuppliers = [...SUPPLIERS].sort((a, b) => b.todayPoVolume - a.todayPoVolume).slice(0, 6);
 
   return (
-    <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
-          <h2 className={styles.title}>Replenishment Automation</h2>
-          <p className={styles.sub}>
-            Every reorder, transfer and PO is triggered and tracked autonomously in real time.
-          </p>
-        </div>
-        <div className={styles.livePill}>
-          <span className={styles.liveDot} />
-          LIVE
-        </div>
-      </div>
-
-      {/* Summary stats */}
-      <div className={styles.statsRow}>
-        {(Object.entries(totals) as [RepEvent['status'],number][]).map(([s,n]) => {
-          const cfg = STATUS_CFG[s];
-          return (
-            <button
-              key={s}
-              className={`${styles.statCard} ${filter===s ? styles.statActive : ''}`}
-              onClick={() => setFilter(filter===s ? 'all' : s)}
-              style={{ '--stat-color': cfg.color } as React.CSSProperties}
-            >
-              <span className={styles.statIcon}>{cfg.icon}</span>
-              <span className={styles.statNum} style={{color:cfg.color}}>{n}</span>
-              <span className={styles.statLabel}>{cfg.label}</span>
-            </button>
-          );
-        })}
-        <div className={styles.statCard} style={{'--stat-color':'var(--ok)'}as React.CSSProperties}>
-          <span className={styles.statIcon}>💰</span>
-          <span className={styles.statNum} style={{color:'var(--ok)'}}>EGP {(totalValue/1000).toFixed(1)}K</span>
-          <span className={styles.statLabel}>Total Value</span>
-        </div>
-      </div>
-
-      {/* Animated pipeline */}
-      <div className={styles.pipeline}>
-        <div className={styles.pipelineTitle}>Automated Replenishment Pipeline</div>
-        <div className={styles.pipelineSteps}>
-          {PIPELINE_STEPS.map((step, i) => (
-            <div key={i} className={`${styles.step} ${i === activeStep ? styles.stepActive : ''} ${i < activeStep ? styles.stepDone : ''}`}>
-              <div className={styles.stepIconWrap}>
-                <div className={styles.stepIcon}>{step.icon}</div>
-                {i < PIPELINE_STEPS.length-1 && <div className={`${styles.stepLine} ${i < activeStep ? styles.stepLineDone : ''}`} />}
+    <div className={styles.panel}>
+      <div className={styles.topRow}>
+        {/* Left: Pipeline + Run */}
+        <div className={styles.pipelineCard}>
+          <SpeakerHint text="Click Run Now. This simulates a full replenishment cycle for 500 branches, 70,247 SKUs. Watch the counter — that is how many decisions DIOS evaluated in under 2 seconds.">
+            <div className={styles.runArea}>
+              <div className={styles.runHeader}>
+                <div>
+                  <div className={styles.cardTitle}>Replenishment Engine</div>
+                  <div className={styles.cardSub}>Full network optimization cycle · 500 branches · 70,247 SKUs</div>
+                </div>
+                <button
+                  className={`${styles.runBtn} ${running ? styles.running : ''}`}
+                  onClick={handleRun}
+                  disabled={running}
+                >
+                  {running ? 'Running...' : 'Run Now'}
+                </button>
               </div>
-              <div className={styles.stepLabel}>{step.label}</div>
-              {i === activeStep && <div className={styles.stepDesc}>{step.desc}</div>}
+
+              <div className={styles.counterWrap}>
+                <span className={styles.counterLabel}>Decisions evaluated</span>
+                <span className={`${styles.mono} ${styles.counterValue}`}>{evalCount.toLocaleString()}</span>
+              </div>
+
+              <div className={styles.pipeline}>
+                {PIPELINE_STEPS.map((step, idx) => {
+                  const isActive = pipelineStep === idx;
+                  const isDone = pipelineStep > idx;
+                  return (
+                    <div
+                      key={step}
+                      className={`${styles.pipeStep} ${isActive ? styles.active : ''} ${isDone ? styles.done : ''}`}
+                    >
+                      <div className={styles.stepNum}>{isDone ? '\u2713' : idx + 1}</div>
+                      <div className={styles.stepLabel}>{step}</div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          ))}
+          </SpeakerHint>
+
+          {cycleComplete && showFinancial && (
+            <SpeakerHint text="This is the causal chain. Faster cycle = higher turnover = released working capital = margin expansion. The numbers move live to show the compounding effect.">
+              <div className={styles.financialPanel}>
+                <div className={styles.financialTitle}>Financial Transformation — Live</div>
+                <div className={styles.financialGrid}>
+                  <div className={styles.financialCard} style={{ borderLeft: '3px solid var(--ok)' }}>
+                    <div className={styles.financialLabel}>Sales Cycle</div>
+                    <div className={styles.financialValue}><span className={styles.mono}>{salesCycleDisplay.toFixed(1)}</span> days</div>
+                    <div className={styles.financialSub} style={{ color: 'var(--ok)' }}>Compressing in real time</div>
+                  </div>
+                  <div className={styles.financialArrow}>
+                    <div className={styles.arrowLabel}>Causal: faster cycles released capital margin lift</div>
+                  </div>
+                  <div className={styles.financialCard} style={{ borderLeft: '3px solid var(--accent)' }}>
+                    <div className={styles.financialLabel}>Gross Margin</div>
+                    <div className={styles.financialValue}><span className={styles.mono}>{marginDisplay.toFixed(1)}</span>%</div>
+                    <div className={styles.financialSub} style={{ color: 'var(--accent)' }}>Expanding via turnover</div>
+                  </div>
+                </div>
+                {showFootnote && (
+                  <div className={styles.footnote}>
+                    EGP 12.6M working capital released · 7.3x ROI on platform · Annual value generated: EGP 39.4M
+                  </div>
+                )}
+              </div>
+            </SpeakerHint>
+          )}
+
+          <div className={styles.metricsRow}>
+            <div className={styles.metricTile}>
+              <div className={`${styles.mono} ${styles.metricValue}`}>1,847</div>
+              <div className={styles.metricLabel}>POs Fired Today</div>
+            </div>
+            <div className={styles.metricTile}>
+              <div className={`${styles.mono} ${styles.metricValue}`}>412,890</div>
+              <div className={styles.metricLabel}>Units in Transit</div>
+            </div>
+            <div className={styles.metricTile}>
+              <div className={`${styles.mono} ${styles.metricValue}`}>23</div>
+              <div className={styles.metricLabel}>Pending Confirmations</div>
+            </div>
+            <div className={styles.metricTile}>
+              <div className={`${styles.mono} ${styles.metricValue}`}>EGP 47.3M</div>
+              <div className={styles.metricLabel}>Total Value in Cycle</div>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.rightCol}>
+          <div className={styles.card}>
+            <div className={styles.sectionTitle}>Supplier Activity — Today</div>
+            {topSuppliers.map(s => (
+              <div key={s.name} className={styles.supplierRow}>
+                <div className={styles.supplierName}>{s.name}</div>
+                <div className={styles.supplierBarWrap}>
+                  <div
+                    className={styles.supplierBar}
+                    style={{ width: `${(s.todayPoVolume / 847000) * 100}%` }}
+                  />
+                </div>
+                <span className={styles.mono} style={{ fontSize: 11, color: 'var(--text-3)' }}>
+                  EGP {(s.todayPoVolume / 1000).toFixed(0)}K
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.card}>
+            <div className={styles.sectionTitle}>Branch Health Breakdown</div>
+            <div className={styles.healthGrid}>
+              <div className={styles.healthItem} style={{ borderTop: '3px solid var(--ok)' }}>
+                <span className={`${styles.mono} ${styles.healthCount}`} style={{ color: 'var(--ok)' }}>312</span>
+                <span className={styles.healthLabel}>Optimal</span>
+              </div>
+              <div className={styles.healthItem} style={{ borderTop: '3px solid var(--warn)' }}>
+                <span className={`${styles.mono} ${styles.healthCount}`} style={{ color: 'var(--warn)' }}>148</span>
+                <span className={styles.healthLabel}>Monitor</span>
+              </div>
+              <div className={styles.healthItem} style={{ borderTop: '3px solid #F97316' }}>
+                <span className={`${styles.mono} ${styles.healthCount}`} style={{ color: '#F97316' }}>28</span>
+                <span className={styles.healthLabel}>Attention</span>
+              </div>
+              <div className={styles.healthItem} style={{ borderTop: '3px solid var(--err)' }}>
+                <span className={`${styles.mono} ${styles.healthCount}`} style={{ color: 'var(--err)' }}>12</span>
+                <span className={styles.healthLabel}>Critical</span>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.card}>
+            <div className={styles.sectionTitle}>Strategy Weights — Active</div>
+            {[
+              { label: 'Stock Availability', val: 80, color: 'var(--ok)' },
+              { label: 'ROI Maximisation', val: 70, color: 'var(--accent)' },
+              { label: 'Cash Flow Speed', val: 60, color: 'var(--info)' },
+              { label: 'Shelf-life / Waste', val: 55, color: 'var(--warn)' },
+              { label: 'Distribution Speed', val: 50, color: '#a78bfa' },
+            ].map(w => (
+              <div key={w.label} className={styles.weightRow}>
+                <span className={styles.weightLabel}>{w.label}</span>
+                <div className={styles.weightBarWrap}>
+                  <div className={styles.weightBar} style={{ width: `${w.val}%`, background: w.color }} />
+                </div>
+                <span className={`${styles.mono} ${styles.weightVal}`}>{w.val}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Live feed */}
-      <div className={styles.feedSection}>
+      <div className={styles.feedCard}>
         <div className={styles.feedHeader}>
-          <div className={styles.secLabel}>Live Replenishment Feed</div>
-          <div className={styles.filterRow}>
-            {(['all','fired','dispatched','delivered','pending'] as const).map(f => (
+          <span className={styles.sectionTitle} style={{ marginBottom: 0 }}>Live Decision Feed</span>
+          <div className={styles.filterPills}>
+            {allTypes.map(t => (
               <button
-                key={f}
-                className={`${styles.filterBtn} ${filter===f ? styles.filterActive : ''}`}
-                onClick={() => setFilter(f)}
+                key={t}
+                className={`${styles.filterPill} ${feedFilter === t ? styles.activePill : ''}`}
+                onClick={() => setFeedFilter(t)}
               >
-                {f === 'all' ? 'All' : STATUS_CFG[f].label}
+                {t}
               </button>
             ))}
           </div>
         </div>
-        <div className={styles.feed} ref={scrollRef}>
-          {filtered.map(e => {
-            const cfg = STATUS_CFG[e.status];
-            return (
-              <div key={e.id} className={`${styles.feedRow} ${e.id===newId ? styles.feedRowNew : ''}`}>
-                <span className={styles.feedTs}>{e.ts}</span>
-                <span className={styles.feedIcon}>{cfg.icon}</span>
-                <div className={styles.feedBody}>
-                  <span className={styles.feedAction}>{e.action}</span>
-                  <span className={styles.feedMeta}>
-                    <span className={styles.feedSku}>{e.sku}</span>
-                    <span>·</span>
-                    <span>{e.branch}</span>
-                    <span>·</span>
-                    <span>{e.qty.toLocaleString()} units</span>
-                    <span>·</span>
-                    <span style={{color:'var(--ok)'}}>EGP {e.value.toLocaleString()}</span>
-                  </span>
-                </div>
-                <span className={styles.feedStatus} style={{color:cfg.color,borderColor:`${cfg.color}40`,background:`${cfg.color}10`}}>
-                  {cfg.label}
-                </span>
-              </div>
-            );
-          })}
+        <div className={styles.feedList}>
+          {filteredFeed.slice(0, 20).map(d => (
+            <div key={d.id} className={styles.feedItem}>
+              <span className={`${styles.mono} ${styles.feedTs}`}>{d.timestamp}</span>
+              <span
+                className={styles.feedType}
+                style={{ color: TYPE_COLORS[d.type] || 'var(--text-3)' }}
+              >
+                {d.type}
+              </span>
+              <span className={styles.feedHeadline}>{d.headline}</span>
+              <span
+                className={styles.feedStatus}
+                style={{ color: STATUS_COLOR[d.status] }}
+              >
+                {d.status}
+              </span>
+              <span className={`${styles.mono} ${styles.feedConf}`}>
+                {(d.confidence * 100).toFixed(1)}%
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -50,7 +50,7 @@
   display: flex;
   align-items: center;
   gap: 0;
-  animation: scroll 120s linear infinite;
+  animation: scroll 90s linear infinite;
   padding-left: 20px;
 }
 

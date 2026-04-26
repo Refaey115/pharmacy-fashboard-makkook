@@ -1,23 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Sidebar              from '../../components/Sidebar';
-import LiveAiBar            from '../../components/LiveAiBar';
-import KpiPanel             from './KpiPanel';
-import InventoryPanel       from './InventoryPanel';
-import LogPanel             from './LogPanel';
-import CashFlowPanel        from '../shared/CashFlowPanel';
-import DemandForecastPanel  from '../shared/DemandForecastPanel';
-import ReplenishmentPlanPanel from '../shared/ReplenishmentPlanPanel';
-import PurchaseOrdersPanel  from '../shared/PurchaseOrdersPanel';
-import SimpleControlCenter  from '../shared/SimpleControlCenter';
-
-// Legacy panels kept as source — not shown in nav
-// import ControlCenterPanel from '../shared/ControlCenterPanel';
-// import PriceForecastPanel from '../shared/PriceForecastPanel';
-// import SkuAffinityPanel   from '../shared/SkuAffinityPanel';
-// import ReplenishmentPanel from '../shared/ReplenishmentPanel';
-// import DemandPanel        from './DemandPanel';
-// import SupplyPanel        from './SupplyPanel';
-// import RoiPanel           from './RoiPanel';
+import Sidebar from '../../components/Sidebar';
+import LiveAiBar from '../../components/LiveAiBar';
+import CommandBridgePanel from '../shared/CommandBridgePanel';
+import ReplenishmentPanel from '../shared/ReplenishmentPanel';
+import NetworkPanel from '../shared/NetworkPanel';
+import MarginEnginePanel from '../shared/MarginEnginePanel';
+import DisruptionPanel from '../shared/DisruptionPanel';
+import LedgerPanel from '../shared/LedgerPanel';
 
 export default function AdminLayout() {
   return (
@@ -27,18 +16,17 @@ export default function AdminLayout() {
         <LiveAiBar />
         <div className="panel-scroll">
           <Routes>
-            <Route index                   element={<Navigate to="kpi" replace />} />
-            <Route path="kpi"              element={<KpiPanel />} />
-            <Route path="demandforecast"   element={<DemandForecastPanel />} />
-            <Route path="replplan"         element={<ReplenishmentPlanPanel />} />
-            <Route path="purchaseorders"   element={<PurchaseOrdersPanel />} />
-            <Route path="inventory"        element={<InventoryPanel />} />
-            <Route path="cashflow"         element={<CashFlowPanel />} />
-            <Route path="optimise"         element={<SimpleControlCenter />} />
-            <Route path="log"              element={<LogPanel />} />
-            <Route path="*"                element={<Navigate to="kpi" replace />} />
+            <Route index element={<Navigate to="command" replace />} />
+            <Route path="command" element={<CommandBridgePanel />} />
+            <Route path="replenishment" element={<ReplenishmentPanel />} />
+            <Route path="network" element={<NetworkPanel />} />
+            <Route path="margin" element={<MarginEnginePanel />} />
+            <Route path="disruption" element={<DisruptionPanel />} />
+            <Route path="ledger" element={<LedgerPanel />} />
+            <Route path="*" element={<Navigate to="command" replace />} />
           </Routes>
         </div>
+        <div className="makkook-footer">Powered by Makkook — Intelligence that Commands.</div>
       </div>
     </div>
   );
