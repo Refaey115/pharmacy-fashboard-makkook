@@ -1,0 +1,118 @@
+/* SimpleControlCenter.module.css */
+
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+/* Header */
+.header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.title { font-size: 20px; font-weight: 700; color: var(--text-1); margin: 0 0 4px; }
+.sub   { font-size: 13px; color: var(--text-3); margin: 0; }
+
+.headerActions { display: flex; gap: 10px; align-items: center; }
+
+.resetBtn {
+  background: transparent; border: 1px solid var(--border); color: var(--text-2);
+  padding: 7px 16px; border-radius: 6px; font-size: 13px; cursor: pointer;
+  transition: border-color .15s;
+}
+.resetBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.applyBtn {
+  background: var(--accent); border: none; color: #fff;
+  padding: 7px 22px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: opacity .15s;
+}
+.applyBtn:hover { opacity: .85; }
+.applyDone { background: #22c55e !important; }
+
+/* Banner */
+.appliedBanner {
+  background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3);
+  border-radius: 8px; padding: 10px 16px; font-size: 13px; color: #4ade80;
+}
+
+/* Two-column layout */
+.twoCol { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Slider block */
+.sliderBlock {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.blockTitle {
+  font-size: 12px; font-weight: 700; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 12px;
+}
+
+.sliderRow {
+  border-left: 3px solid var(--row-color, var(--border));
+  padding: 10px 0 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.sliderRow:last-child { border-bottom: none; }
+
+.sliderMeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.sliderLabel { font-size: 13px; font-weight: 600; color: var(--text-1); }
+.sliderVal   { font-size: 14px; font-weight: 700; color: var(--row-color, var(--accent)); min-width: 32px; text-align: right; }
+.sliderDesc  { font-size: 11px; color: var(--text-3); margin-bottom: 8px; }
+
+.range {
+  width: 100%; appearance: none; height: 4px;
+  border-radius: 2px; outline: none; cursor: pointer;
+  background: linear-gradient(
+    to right,
+    var(--thumb-color, var(--accent)) 0%,
+    var(--thumb-color, var(--accent)) calc(var(--val, 50%) * 1%),
+    rgba(255,255,255,.12) calc(var(--val, 50%) * 1%),
+    rgba(255,255,255,.12) 100%
+  );
+}
+.range::-webkit-slider-thumb {
+  appearance: none; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--thumb-color, var(--accent)); cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.4);
+  transition: transform .1s;
+}
+.range::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.range::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--thumb-color, var(--accent)); cursor: pointer; border: none;
+}
+
+/* Radar block */
+.radarBlock {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+}
+.radarWrap { height: 300px; }
+
+/* Impact grid */
+.impactGrid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+
+.impactNote { color: var(--text-3); font-weight: 400; font-size: 11px; text-transform: none; letter-spacing: 0; }
+
+.impactCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 6px;
+}
+.impOk   { border-left: 3px solid #4ade80; }
+.impWarn { border-left: 3px solid #fbbf24; }
+.impBad  { border-left: 3px solid #f87171; }
+
+.impLabel  { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+.impValRow { display: flex; align-items: baseline; gap: 8px; }
+.impVal    { font-size: 22px; font-weight: 700; color: var(--text-1); }
+
+.deltaUp { font-size: 11px; color: #4ade80; font-weight: 600; }
+.deltaDn { font-size: 11px; color: #f87171; font-weight: 600; }
+
+.impBar { height: 4px; background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden; }
+.impBarFill { height: 100%; border-radius: 2px; transition: width .4s ease; }
+.barOk   { background: #4ade80; }
+.barWarn { background: #fbbf24; }
+.barBad  { background: #f87171; }

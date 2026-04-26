@@ -1,0 +1,103 @@
+/* DemandForecastPanel.module.css */
+
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+/* ── Header ── */
+.header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.title { font-size: 20px; font-weight: 700; color: var(--text-1); margin: 0 0 4px; }
+.sub   { font-size: 13px; color: var(--text-3); margin: 0; }
+.sub strong { color: var(--accent); }
+
+/* ── Controls ── */
+.controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.btnGroup { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.btn {
+  background: transparent; border: none; color: var(--text-2);
+  padding: 6px 14px; font-size: 12px; cursor: pointer; transition: background .15s, color .15s;
+}
+.btn:hover    { background: var(--surface2); }
+.btnActive    { background: var(--accent) !important; color: #fff !important; font-weight: 600; }
+
+.select {
+  background: var(--surface); border: 1px solid var(--border); color: var(--text-2);
+  padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;
+  max-width: 220px;
+}
+
+/* ── KPI row ── */
+.kpiRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+.kpiCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
+}
+.kpiErr  { border-left: 3px solid var(--err); }
+.kpiWarn { border-left: 3px solid var(--warn); }
+.kpiInfo { border-left: 3px solid var(--info); }
+
+.kpiLabel { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+.kpiVal   { font-size: 22px; font-weight: 700; color: var(--text-1); }
+.kpiSub   { font-size: 11px; color: var(--text-3); }
+
+/* ── Chart card ── */
+.chartCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+}
+.chartTitle { font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 12px; }
+.chartWrap  { height: 200px; }
+
+/* ── Table card ── */
+.tableCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+}
+.tableTitle { font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 12px; }
+.tableScroll { overflow-x: auto; }
+
+.table {
+  width: 100%; border-collapse: collapse; font-size: 12px; color: var(--text-2);
+  white-space: nowrap;
+}
+.table thead tr { background: var(--surface2, #2f2f2f); }
+.table th {
+  padding: 9px 12px; text-align: left; font-weight: 600;
+  font-size: 11px; color: var(--text-3); text-transform: uppercase;
+  letter-spacing: .04em; border-bottom: 1px solid var(--border);
+}
+.table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.table tbody tr:hover { background: rgba(255,255,255,.03); }
+
+.rowCrit { background: rgba(239,68,68,.06) !important; }
+.rowWarn { background: rgba(245,158,11,.06) !important; }
+
+.locCell  { color: var(--text-1); font-weight: 500; }
+.skuCell  { font-family: monospace; color: var(--accent); font-weight: 600; }
+.numCell  { text-align: right; }
+.cashCell { text-align: right; font-weight: 600; color: var(--text-1); }
+.shortCell { color: var(--err); font-weight: 600; }
+
+.catTag {
+  background: rgba(255,255,255,.07); border-radius: 4px;
+  padding: 2px 7px; font-size: 11px; color: var(--text-3);
+}
+
+/* Coverage badge */
+.coverBadge {
+  display: inline-block; border-radius: 4px; padding: 2px 8px;
+  font-size: 11px; font-weight: 700;
+}
+.cover_critical { background: rgba(239,68,68,.2);  color: #f87171; }
+.cover_low      { background: rgba(245,158,11,.2); color: #fbbf24; }
+.cover_ok       { background: rgba(74,222,128,.15); color: #4ade80; }
+
+/* Status dot */
+.statusDot {
+  display: inline-block; border-radius: 4px; padding: 2px 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .05em;
+}
+.dot_critical { background: rgba(239,68,68,.2);  color: #f87171; }
+.dot_low      { background: rgba(245,158,11,.2); color: #fbbf24; }
+.dot_ok       { background: rgba(74,222,128,.15); color: #4ade80; }

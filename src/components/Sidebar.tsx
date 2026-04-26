@@ -8,17 +8,14 @@ interface NavItem { label: string; path: string }
 
 function buildNav(base: string): NavItem[] {
   return [
-    { label: 'KPI Overview',   path: `${base}/kpi`           },
-    { label: 'Demand',         path: `${base}/demand`        },
-    { label: 'Supply Chain',   path: `${base}/supply`        },
-    { label: 'Inventory',      path: `${base}/inventory`     },
-    { label: 'Financial ROI',  path: `${base}/roi`           },
-    { label: 'Decision Log',   path: `${base}/log`           },
-    { label: 'Control Center', path: `${base}/control`       },
-    { label: 'Price Forecast', path: `${base}/forecast`      },
-    { label: 'SKU Affinity',   path: `${base}/affinity`      },
-    { label: 'Replenishment',  path: `${base}/replenishment` },
-    { label: 'Cash Flow',      path: `${base}/cashflow`      },
+    { label: 'Overview',            path: `${base}/kpi`            },
+    { label: 'Demand Forecast',     path: `${base}/demandforecast` },
+    { label: 'Replenishment Plan',  path: `${base}/replplan`       },
+    { label: 'Purchase Orders',     path: `${base}/purchaseorders` },
+    { label: 'Inventory',           path: `${base}/inventory`      },
+    { label: 'Cash Flow',           path: `${base}/cashflow`       },
+    { label: 'Optimise Strategy',   path: `${base}/optimise`       },
+    { label: 'Decision Log',        path: `${base}/log`            },
   ];
 }
 

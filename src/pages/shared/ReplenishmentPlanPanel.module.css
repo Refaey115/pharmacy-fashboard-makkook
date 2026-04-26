@@ -1,0 +1,110 @@
+/* ReplenishmentPlanPanel.module.css */
+
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+/* Header */
+.header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.title { font-size: 20px; font-weight: 700; color: var(--text-1); margin: 0 0 4px; }
+.sub   { font-size: 13px; color: var(--text-3); margin: 0; }
+
+/* Controls */
+.controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btnGroup { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.btn {
+  background: transparent; border: none; color: var(--text-2);
+  padding: 6px 14px; font-size: 12px; cursor: pointer; transition: background .15s;
+}
+.btn:hover  { background: var(--surface2); }
+.btnActive  { background: var(--accent) !important; color: #fff !important; font-weight: 600; }
+
+/* KPI row */
+.kpiRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.kpiCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
+}
+.kpiAccent { border-left: 3px solid var(--accent); }
+.kpiWarn   { border-left: 3px solid var(--warn); }
+.kpiLabel  { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+.kpiVal    { font-size: 22px; font-weight: 700; color: var(--text-1); }
+.kpiSub    { font-size: 11px; color: var(--text-3); }
+
+/* Section */
+.section {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden;
+}
+.sectionHead {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.sectionTitle {
+  font-size: 14px; font-weight: 700; color: var(--text-1);
+  display: flex; align-items: center; gap: 8px;
+}
+.sectionIcon { font-size: 15px; }
+.count {
+  background: var(--surface2, #333); border-radius: 20px;
+  padding: 2px 10px; font-size: 11px; color: var(--text-3); font-weight: 400;
+}
+.sectionNote { font-size: 12px; color: var(--text-3); }
+
+.empty { padding: 20px 16px; color: var(--text-3); font-size: 13px; }
+
+/* Table */
+.tableScroll { overflow-x: auto; }
+.table {
+  width: 100%; border-collapse: collapse; font-size: 12px; color: var(--text-2);
+  white-space: nowrap;
+}
+.table thead tr { background: rgba(255,255,255,.03); }
+.table th {
+  padding: 9px 12px; text-align: left;
+  font-size: 11px; color: var(--text-3); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em;
+  border-bottom: 1px solid var(--border);
+}
+.table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.table tbody tr:hover { background: rgba(255,255,255,.03); }
+
+.rowCrit { background: rgba(239,68,68,.06) !important; }
+.rowWarn { background: rgba(245,158,11,.06) !important; }
+
+.locCell  { color: var(--text-1); font-weight: 500; min-width: 110px; }
+.skuCell  { font-family: monospace; color: var(--accent); font-weight: 600; }
+.boldCell { font-weight: 700; color: var(--text-1); }
+.whCell   { color: var(--info, #60a5fa); font-size: 11px; }
+.suppCell { color: var(--text-2); font-size: 11px; }
+.cashCell { text-align: right; font-weight: 600; color: var(--text-1); }
+.dateCell { color: var(--text-3); font-size: 11px; }
+
+/* Badges */
+.badge {
+  display: inline-block; border-radius: 4px; padding: 2px 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .05em;
+}
+.badge_critical { background: rgba(239,68,68,.2);  color: #f87171; }
+.badge_low      { background: rgba(245,158,11,.2); color: #fbbf24; }
+.badge_ok       { background: rgba(74,222,128,.15); color: #4ade80; }
+
+.coverBadge {
+  display: inline-block; border-radius: 4px; padding: 2px 8px;
+  font-size: 11px; font-weight: 700;
+}
+.cover_critical { background: rgba(239,68,68,.2);  color: #f87171; }
+.cover_low      { background: rgba(245,158,11,.2); color: #fbbf24; }
+.cover_ok       { background: rgba(74,222,128,.15); color: #4ade80; }
+
+/* Detail row */
+.detailRow td { padding: 0 !important; }
+.detailCell { padding: 0 !important; }
+.detailBox {
+  background: rgba(225,84,29,.07); border-left: 3px solid var(--accent);
+  padding: 12px 16px; font-size: 12px; color: var(--text-2); line-height: 1.6;
+}
+.detailBox strong { color: var(--text-1); }
+.detailBox em { color: var(--accent); font-style: normal; }

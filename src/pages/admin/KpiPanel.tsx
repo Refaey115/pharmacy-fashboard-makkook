@@ -97,6 +97,23 @@ export default function KpiPanel() {
         </div>
       </div>
 
+      {/* Modules on standby */}
+      <div className={styles.standbyRow}>
+        <div className={styles.standbyLabel}>Modules on Standby — not shown in current simplified view</div>
+        {[
+          { name: 'Financial ROI', desc: 'Return-on-investment analysis per SKU, branch and supplier. Tracks margin contribution and capital efficiency ratios.' },
+          { name: 'SKU Affinity', desc: 'Market-basket analysis across branches. Identifies co-purchased SKUs to drive cross-sell and bundle promotions.' },
+          { name: 'Price Forecast', desc: 'Predictive pricing engine using demand elasticity, competitor signals and seasonal curves to recommend optimal retail prices.' },
+          { name: 'Supply Chain', desc: 'End-to-end supply chain visibility: supplier lead variance, transit tracking and risk scoring per vendor.' },
+        ].map(m => (
+          <div key={m.name} className={styles.standbyCard}>
+            <span className={styles.standbyName}>{m.name}</span>
+            <span className={styles.standbyDesc}>{m.desc}</span>
+            <span className={styles.standbyChip}>STANDBY</span>
+          </div>
+        ))}
+      </div>
+
       {/* Bottom 3-col briefing row */}
       <div className={styles.briefRow}>
         {/* Calendar */}

@@ -1,0 +1,140 @@
+/* PurchaseOrdersPanel.module.css */
+
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+/* Header */
+.header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.title { font-size: 20px; font-weight: 700; color: var(--text-1); margin: 0 0 4px; }
+.sub   { font-size: 13px; color: var(--text-3); margin: 0; }
+
+/* Controls */
+.controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btnGroup { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.btn {
+  background: transparent; border: none; color: var(--text-2);
+  padding: 6px 14px; font-size: 12px; cursor: pointer; transition: background .15s;
+}
+.btn:hover  { background: var(--surface2); }
+.btnActive  { background: var(--accent) !important; color: #fff !important; font-weight: 600; }
+
+/* KPI row */
+.kpiRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.kpiCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
+}
+.kpiCash   { border-left: 3px solid #f87171; }
+.kpiCredit { border-left: 3px solid #60a5fa; }
+.kpiErr    { border-left: 3px solid var(--err); }
+.kpiLabel  { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+.kpiVal    { font-size: 22px; font-weight: 700; color: var(--text-1); }
+.kpiSub    { font-size: 11px; color: var(--text-3); }
+
+/* Cash flow timeline */
+.timelineCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+}
+.tlHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.tlTitle   { font-size: 13px; font-weight: 700; color: var(--text-1); }
+.tlBalance { font-size: 12px; color: var(--text-3); }
+.tlBalance strong { color: var(--text-1); }
+
+.tlRow { display: flex; gap: 10px; flex-wrap: wrap; }
+.tlChip {
+  background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; min-width: 160px; display: flex; flex-direction: column; gap: 3px;
+}
+.tlNeg { border-color: #f87171; background: rgba(239,68,68,.06); }
+.tlDate   { font-size: 11px; color: var(--text-3); }
+.tlAmount { font-size: 13px; font-weight: 700; color: #f87171; }
+.tlBal    { font-size: 11px; color: var(--text-2); }
+.tlBalWarn { color: #fbbf24 !important; }
+.tlEmpty  { font-size: 13px; color: var(--text-3); }
+
+/* PO list */
+.poList { display: flex; flex-direction: column; gap: 12px; }
+.poCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+
+.poHead {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.poHeadCash   { border-left: 4px solid #f87171; }
+.poHeadCredit { border-left: 4px solid #60a5fa; }
+
+.poMeta { display: flex; align-items: center; gap: 10px; flex: 1; flex-wrap: wrap; }
+.poKey  { font-size: 14px; font-weight: 700; color: var(--text-1); }
+.poType { font-size: 12px; }
+.poLineCount { font-size: 12px; color: var(--text-3); }
+
+.poRight { display: flex; align-items: center; gap: 16px; }
+.poDue   { font-size: 12px; color: var(--text-3); }
+.dueDateVal { color: var(--text-1); font-weight: 600; }
+.poTotal { font-size: 16px; font-weight: 700; color: var(--text-1); }
+.chevron { font-size: 10px; color: var(--text-3); }
+
+/* Tags */
+.cashTag {
+  display: inline-block; background: rgba(239,68,68,.18); color: #f87171;
+  border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 700; letter-spacing: .05em;
+}
+.creditTag {
+  display: inline-block; background: rgba(96,165,250,.18); color: #60a5fa;
+  border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 700;
+}
+
+/* Table */
+.tableScroll { overflow-x: auto; }
+.table {
+  width: 100%; border-collapse: collapse; font-size: 12px; color: var(--text-2); white-space: nowrap;
+}
+.table thead tr { background: rgba(255,255,255,.03); }
+.table th {
+  padding: 8px 12px; text-align: left; font-size: 11px; color: var(--text-3);
+  font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+  border-bottom: 1px solid var(--border);
+}
+.table td { padding: 7px 12px; border-bottom: 1px solid var(--border); }
+.table tbody tr:hover { background: rgba(255,255,255,.03); }
+
+.rowCrit { background: rgba(239,68,68,.06) !important; }
+.rowWarn { background: rgba(245,158,11,.06) !important; }
+
+.poIdCell  { font-family: monospace; font-size: 11px; color: var(--text-3); }
+.locCell   { color: var(--text-1); font-weight: 500; }
+.skuCell   { font-family: monospace; color: var(--accent); font-weight: 600; }
+.nameCell  { color: var(--text-2); font-size: 11px; }
+.boldCell  { font-weight: 700; color: var(--text-1); }
+.cashCell  { text-align: right; font-weight: 600; color: var(--text-1); }
+.dateCell  { color: var(--accent); font-size: 11px; }
+.greyCell  { color: var(--text-3); font-size: 11px; }
+
+/* Badges */
+.badge {
+  display: inline-block; border-radius: 4px; padding: 2px 7px;
+  font-size: 10px; font-weight: 700; letter-spacing: .05em;
+}
+.badge_critical { background: rgba(239,68,68,.2);  color: #f87171; }
+.badge_low      { background: rgba(245,158,11,.2); color: #fbbf24; }
+.badge_ok       { background: rgba(74,222,128,.15); color: #4ade80; }
+
+/* Subtotal row */
+.subtotalRow { background: rgba(255,255,255,.05) !important; }
+.subtotalLabel { color: var(--text-3); font-weight: 600; font-size: 11px; padding: 10px 12px; }
+.subtotalVal   { text-align: right; font-weight: 700; color: var(--text-1); font-size: 13px; padding: 10px 12px; }
+.dueTip        { color: var(--text-3); font-size: 11px; font-weight: 400; }
+
+/* Empty state */
+.emptyState {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 32px; text-align: center; color: var(--text-3); font-size: 14px;
+}
