@@ -91,7 +91,7 @@ export default function DemandForecastPanel() {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (ctx: { parsed: { y: number } }) =>
+          label: (ctx: { parsed: { y: number | null } }) =>
             ` EGP ${(ctx.parsed.y ?? 0).toLocaleString('en-EG', { minimumFractionDigits: 0 })}`,
         },
       },
