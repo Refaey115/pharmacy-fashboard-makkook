@@ -31,6 +31,7 @@ export default function ReplenishmentPanel() {
   const [running, setRunning] = useState(false);
   const [cycleComplete, setCycleComplete] = useState(false);
   const [pipelineStep, setPipelineStep] = useState(-1);
+  const [idleHighlight, setIdleHighlight] = useState(0);
   const [evalCount, setEvalCount] = useState(0);
   const [salesCycleDisplay, setSalesCycleDisplay] = useState(4.2);
   const [marginDisplay, setMarginDisplay] = useState(38.4);
@@ -40,6 +41,15 @@ export default function ReplenishmentPanel() {
   const [feedFilter, setFeedFilter] = useState('All');
 
   const feedSeedRef = useRef(30);
+
+  // Fix 14.8: idle pipeline highlight cycles through steps every 1.5s
+  useEffect(() => {
+    if (running) return;
+    const iv = setInterval(() => {
+      setIdleHighlight(prev => (prev + 1) % PIPELINE_STEPS.length);
+    }, 1500);
+    return () => clearInterval(iv);
+  }, [running]);
 
   useEffect(() => {
     setFeed(generateDecisions(30));
@@ -142,7 +152,7 @@ export default function ReplenishmentPanel() {
                   return (
                     <div
                       key={step}
-                      className={`${styles.pipeStep} ${isActive ? styles.active : ''} ${isDone ? styles.done : ''}`}
+                      className={`${styles.pipeStep} ${isActive ? styles.active : ''} ${isDone ? styles.done : ''} ${!running && !isActive && !isDone && idleHighlight === idx ? styles.idlePulse : ''}`}
                     >
                       <div className={styles.stepNum}>{isDone ? '\u2713' : idx + 1}</div>
                       <div className={styles.stepLabel}>{step}</div>

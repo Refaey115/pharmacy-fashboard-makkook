@@ -131,7 +131,8 @@ export default function CommandBridgePanel() {
           <div className={styles.mapCard}>
             <div className={styles.mapHeader}>
               <span className={styles.sectionTitle}>Network Health by Region</span>
-              <span className={styles.mapCounter}>
+              <span className={styles.mapCounter} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="dios-heartbeat" />
                 Updated every cycle · <strong className={styles.mono}>{optimizeCounter}</strong>s ago
               </span>
             </div>

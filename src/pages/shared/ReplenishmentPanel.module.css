@@ -78,6 +78,15 @@
   transition: all 0.3s ease;
 }
 
+/* Fix 14.8: idle pulse cycling through steps */
+@keyframes idlePulse {
+  0%, 100%  { transform: scale(1);    box-shadow: none; }
+  50%       { transform: scale(1.04); box-shadow: 0 0 10px rgba(225,84,29,0.22); }
+}
+.pipeStep.idlePulse {
+  animation: idlePulse 1.4s ease-in-out infinite;
+}
+
 .pipeStep.active {
   border-color: var(--accent);
   box-shadow: 0 0 12px rgba(225,84,29,0.6);

@@ -98,9 +98,11 @@
   overflow-y: auto;
 }
 
+/* Fix 14.2 — confidence beacon border-left (color set inline per card) */
 .feedItem {
   border-bottom: 1px solid rgba(255,255,255,0.04);
-  transition: background 0.15s;
+  border-left: 2px solid transparent;
+  transition: background 0.15s, border-left-color 0.2s;
 }
 
 .feedItem:hover { background: rgba(255,255,255,0.02); }

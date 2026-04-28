@@ -169,8 +169,11 @@ export default function LedgerPanel() {
             </div>
 
             <div className={styles.feedList}>
-              {filtered.slice(0, 40).map(d => (
-                <div key={d.id} className={styles.feedItem}>
+              {filtered.slice(0, 40).map(d => {
+                const confPct = d.confidence * 100;
+                const beaconColor = confPct >= 95 ? 'var(--ok)' : confPct >= 85 ? 'var(--accent)' : confPct >= 75 ? 'var(--warn)' : 'var(--err)';
+                return (
+                <div key={d.id} className={styles.feedItem} style={{ borderLeftColor: beaconColor }}>
                   <div className={styles.feedItemTop}>
                     <span className={`${styles.mono} ${styles.feedTs}`}>{d.timestamp}</span>
                     <span className={styles.feedType} style={{ color: TYPE_COLORS[d.type] || 'var(--text-3)' }}>
@@ -226,7 +229,8 @@ export default function LedgerPanel() {
                     </div>
                   )}
                 </div>
-              ))}
+              );
+              })}
             </div>
           </div>
         </SpeakerHint>
