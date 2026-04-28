@@ -146,17 +146,17 @@ export default function CommandBridgePanel() {
             <div className={styles.sectionTitle}>Seasonal Triggers</div>
             <div className={styles.seasonList}>
               {SEASONAL_EVENTS.map(ev => (
-                <div key={ev.name} className={styles.seasonRow}>
+                <div key={ev.name} className={styles.seasonRow} style={{ opacity: ev.status === 'completed' ? 0.55 : 1 }}>
                   <div className={styles.seasonName}>{ev.name}</div>
                   <div className={styles.seasonMeta}>
                     <span
                       className={styles.pill}
                       style={{
-                        background: ev.status === 'completed' ? 'rgba(74,222,128,0.12)' : ev.status === 'active' ? 'rgba(225,84,29,0.12)' : 'rgba(96,165,250,0.12)',
-                        color: ev.status === 'completed' ? 'var(--ok)' : ev.status === 'active' ? 'var(--accent)' : 'var(--info)',
+                        background: ev.status === 'completed' ? 'rgba(255,255,255,0.06)' : ev.status === 'active' ? 'rgba(225,84,29,0.15)' : 'rgba(96,165,250,0.12)',
+                        color: ev.status === 'completed' ? 'var(--text-3)' : ev.status === 'active' ? 'var(--accent)' : 'var(--info)',
                       }}
                     >
-                      {ev.status === 'completed' ? 'Done' : ev.status === 'active' ? 'Active' : `+${ev.daysUntil}d`}
+                      {ev.status === 'completed' ? `${ev.daysUntil}d ago` : ev.status === 'active' ? 'NOW' : `+${ev.daysUntil}d`}
                     </span>
                     <span className={styles.seasonAction}>{ev.aiActionTaken}</span>
                     {ev.unitsPrePositioned > 0 && (
