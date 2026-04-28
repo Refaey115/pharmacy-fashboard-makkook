@@ -10,7 +10,13 @@ import {
 import { generateDecisions } from '../../data/decisionGen';
 import type { Decision } from '../../data/decisionGen';
 import SpeakerHint from '../../components/SpeakerHint';
+import { CUMULATIVE, CONFIDENCE_HIST } from '../../data/canonicalNumbers';
 import styles from './LedgerPanel.module.css';
+
+type TimeWindow = '24h' | 'week' | 'month' | 'year';
+const TIME_LABELS: Record<TimeWindow, string> = {
+  '24h': '24 Hours', week: 'This Week', month: 'This Month', year: 'This Year (YTD)',
+};
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -34,10 +40,7 @@ const TYPE_COLORS: Record<string, string> = {
 
 const ALL_TYPES = ['All', 'transfer', 'bulk-po', 'shelf-life', 'cash-flow', 'seasonal', 'demand-spike', 'rebalance', 'cycle-close'];
 
-const CONFIDENCE_HIST = {
-  labels: ['<85%', '85-88%', '88-91%', '91-94%', '94-97%', '97-100%'],
-  data: [12, 48, 284, 892, 1847, 890],
-};
+// CONFIDENCE_HIST imported from canonicalNumbers
 
 export default function LedgerPanel() {
   const [decisions, setDecisions] = useState<Decision[]>([]);
@@ -45,6 +48,7 @@ export default function LedgerPanel() {
   const [search, setSearch] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
   const [modalDecision, setModalDecision] = useState<Decision | null>(null);
+  const [timeWindow, setTimeWindow] = useState<TimeWindow>('24h');
   const seedRef = useRef(0);
 
   useEffect(() => {
@@ -99,16 +103,29 @@ export default function LedgerPanel() {
 
   return (
     <div className={styles.panel}>
+      {/* Time window toggle */}
+      <div className={styles.timeToggleRow}>
+        {(Object.keys(TIME_LABELS) as TimeWindow[]).map(w => (
+          <button
+            key={w}
+            className={`${styles.timeBtn} ${timeWindow === w ? styles.timeBtnActive : ''}`}
+            onClick={() => setTimeWindow(w)}
+          >
+            {TIME_LABELS[w]}
+          </button>
+        ))}
+      </div>
+
       {/* Header stats */}
       <div className={styles.statsStrip}>
         <div className={styles.statItem}>
-          <span className={`${styles.mono} ${styles.statValue}`}>38,247</span>
-          <span className={styles.statLabel}>Decisions Today</span>
+          <span className={`${styles.mono} ${styles.statValue}`}>{CUMULATIVE[timeWindow].decisions}</span>
+          <span className={styles.statLabel}>Decisions · {TIME_LABELS[timeWindow]}</span>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
-          <span className={`${styles.mono} ${styles.statValue}`}>EGP 4.7M</span>
-          <span className={styles.statLabel}>Cumulative Value Captured</span>
+          <span className={`${styles.mono} ${styles.statValue}`}>{CUMULATIVE[timeWindow].value}</span>
+          <span className={styles.statLabel}>Value Captured · {TIME_LABELS[timeWindow]}</span>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
@@ -117,7 +134,9 @@ export default function LedgerPanel() {
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
-          <span className={`${styles.mono} ${styles.statValue}`}>3 <span className={styles.statSub}>(0.008%)</span></span>
+          <span className={`${styles.mono} ${styles.statValue}`}>
+            {CUMULATIVE[timeWindow].overrides} <span className={styles.statSub}>({CUMULATIVE[timeWindow].overridesPct})</span>
+          </span>
           <span className={styles.statLabel}>Human Overrides</span>
         </div>
       </div>
@@ -178,7 +197,7 @@ export default function LedgerPanel() {
                         <div><span className={styles.detailLabel}>Branch</span><span className={styles.detailValue}>{d.branch}</span></div>
                         <div><span className={styles.detailLabel}>Supplier</span><span className={styles.detailValue}>{d.supplier}</span></div>
                         <div><span className={styles.detailLabel}>Units</span><span className={`${styles.mono} ${styles.detailValue}`}>{d.units.toLocaleString()}</span></div>
-                        <div><span className={styles.detailLabel}>EGP Value</span><span className={`${styles.mono} ${styles.detailValue}`}>EGP {d.egpValue.toLocaleString()}</span></div>
+                        <div><span className={styles.detailLabel}>USD Value</span><span className={`${styles.mono} ${styles.detailValue}`}>${Math.round(d.egpValue / 5).toLocaleString()}</span></div>
                         <div><span className={styles.detailLabel}>Alternatives</span><span className={`${styles.mono} ${styles.detailValue}`}>{d.alternativesConsidered}</span></div>
                       </div>
                       <div className={styles.detailRow}>
@@ -219,7 +238,7 @@ export default function LedgerPanel() {
           </div>
           <div className={styles.histMeta}>
             <span>Average: <strong className={styles.mono}>94.2%</strong></span>
-            <span>Total today: <strong className={styles.mono}>38,247</strong></span>
+            <span>Total: <strong className={styles.mono}>{CUMULATIVE[timeWindow].decisions}</strong></span>
           </div>
         </div>
       </div>

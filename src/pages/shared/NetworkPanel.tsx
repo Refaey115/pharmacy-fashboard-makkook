@@ -118,7 +118,7 @@ export default function NetworkPanel() {
 
               {/* Branch density bar */}
               <rect x={20} y={296} width={W - 40} height={28} rx={6} fill="rgba(225,84,29,0.08)" stroke="rgba(225,84,29,0.25)" strokeWidth={1} />
-              <text x={W / 2} y={316} textAnchor="middle" fill="#9B9B9B" fontSize={9}>500 Branches — El Ezaby Network — 97.8% Stock Availability</text>
+              <text x={W / 2} y={316} textAnchor="middle" fill="#9B9B9B" fontSize={9}>500 Branches — National Network — 96.4% Stock Availability</text>
             </svg>
           </div>
         </div>

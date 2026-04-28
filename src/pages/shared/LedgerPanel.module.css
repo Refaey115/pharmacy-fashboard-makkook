@@ -1,5 +1,27 @@
 .panel { display: flex; flex-direction: column; gap: 20px; }
 
+/* ── Time window toggle ─────────────────────────────────────────────────────── */
+.timeToggleRow {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.timeBtn {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-3);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.timeBtn:hover { color: var(--text-2); border-color: var(--accent); }
+.timeBtnActive {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
 .statsStrip {
   background: var(--surface);
   border: 1px solid var(--border);

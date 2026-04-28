@@ -13,8 +13,8 @@ export default function LoginPage() {
   const [loading, setLoading]   = useState(false);
 
   useEffect(() => {
-    if (role === 'admin')  navigate('/admin/kpi', { replace: true });
-    if (role === 'client') navigate('/client/kpi', { replace: true });
+    if (role === 'admin')  navigate('/admin/command', { replace: true });
+    if (role === 'client') navigate('/client/command', { replace: true });
   }, [role, navigate]);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -47,7 +47,7 @@ export default function LoginPage() {
           </p>
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
-              <span className={styles.heroStatVal}>97.8%</span>
+              <span className={styles.heroStatVal}>91.7%</span>
               <span className={styles.heroStatLabel}>Forecast Accuracy</span>
             </div>
             <div className={styles.heroStatDivider} />
@@ -57,8 +57,8 @@ export default function LoginPage() {
             </div>
             <div className={styles.heroStatDivider} />
             <div className={styles.heroStat}>
-              <span className={styles.heroStatVal}>128</span>
-              <span className={styles.heroStatLabel}>Stockouts Prevented</span>
+              <span className={styles.heroStatVal}>96.4%</span>
+              <span className={styles.heroStatLabel}>Stock Availability</span>
             </div>
           </div>
         </div>
@@ -68,15 +68,8 @@ export default function LoginPage() {
       <div className={styles.formCol}>
         <div className={styles.card}>
           <div className={styles.cardHeader}>
-            <div className={styles.clientLogo}>
-              <img src="/elezaby-logo.png" alt="El Ezaby Pharmacy" className={styles.elezabyImg} />
-            </div>
-            <div className={styles.dividerRow}>
-              <div className={styles.dividerLine} />
-              <span className={styles.dividerText}>powered by</span>
-              <div className={styles.dividerLine} />
-            </div>
             <img src="/makkook-logo.png" alt="Makkook" className={styles.makkookSmall} />
+            <p className={styles.cardTagline}>AI-powered pharmacy intelligence at scale.</p>
           </div>
 
           <h2 className={styles.heading}>Sign in to your workspace</h2>
@@ -165,7 +158,7 @@ export default function LoginPage() {
                 </svg>
                 Client
               </span>
-              <code className={styles.credCode}>elezaby / ezaby2026</code>
+              <code className={styles.credCode}>client / client2026</code>
             </div>
           </div>
         </div>

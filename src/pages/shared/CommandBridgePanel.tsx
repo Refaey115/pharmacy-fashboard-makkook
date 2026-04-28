@@ -4,6 +4,14 @@ import type { Branch } from '../../data/branches';
 import { SKUS } from '../../data/skus';
 import { SEASONAL_EVENTS } from '../../data/seasonality';
 import SpeakerHint from '../../components/SpeakerHint';
+import {
+  BRANCHES_COUNT, SKUS_COUNT, DECISIONS_PER_DAY,
+  SALES_CYCLE_AFTER, SALES_CYCLE_BEFORE,
+  GROSS_MARGIN_AFTER, GROSS_MARGIN_BEFORE,
+  STOCK_AVAIL_AFTER,
+  ANNUAL_VALUE_USD, ROI,
+} from '../../data/canonicalNumbers';
+import { formatUSD } from '../../utils/formatCurrency';
 import styles from './CommandBridgePanel.module.css';
 
 function useCountUp(target: number, duration: number, delay: number = 0) {
@@ -45,9 +53,9 @@ const W = 800;
 const H = 300;
 
 export default function CommandBridgePanel() {
-  const branchCount = useCountUp(500, 1200, 0);
-  const skuCount = useCountUp(70247, 1400, 800);
-  const decisionRaw = useCountUp(35100000, 1600, 1600);
+  const branchCount = useCountUp(BRANCHES_COUNT, 1200, 0);
+  const skuCount = useCountUp(SKUS_COUNT, 1400, 800);
+  const decisionRaw = useCountUp(DECISIONS_PER_DAY, 1600, 1600);
 
   const [hoveredBranch, setHoveredBranch] = useState<Branch | null>(null);
   const [optimizeCounter, setOptimizeCounter] = useState(4);
@@ -88,7 +96,7 @@ export default function CommandBridgePanel() {
             </div>
           </div>
           <div className={styles.heroSubtext}>
-            Makkook DIOS — Decision Intelligence Operating System — managing El Ezaby Pharmacy network in real time
+            Makkook DIOS — Decision Intelligence Operating System — managing the network in real time
           </div>
         </div>
       </SpeakerHint>
@@ -97,27 +105,27 @@ export default function CommandBridgePanel() {
       <div className={styles.kpiGrid}>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>Sales Cycle Velocity</div>
-          <div className={styles.kpiValue}><span className={styles.mono}>4.2</span> days</div>
-          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>-1.8d vs prior</div>
-          <div className={styles.kpiInsight}>30% faster than industry baseline</div>
+          <div className={styles.kpiValue}><span className={styles.mono}>{SALES_CYCLE_AFTER}</span> days</div>
+          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>-{(SALES_CYCLE_BEFORE - SALES_CYCLE_AFTER).toFixed(1)}d vs baseline</div>
+          <div className={styles.kpiInsight}>30% faster than industry standard</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>Gross Profit Margin</div>
-          <div className={styles.kpiValue}><span className={styles.mono}>38.4</span>%</div>
-          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>+4.1pp vs prior</div>
+          <div className={styles.kpiValue}><span className={styles.mono}>{GROSS_MARGIN_AFTER}</span>%</div>
+          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>+{(GROSS_MARGIN_AFTER - GROSS_MARGIN_BEFORE).toFixed(1)}pp vs baseline</div>
           <div className={styles.kpiInsight}>Margin expansion via supplier consolidation</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>Stock Availability</div>
-          <div className={styles.kpiValue}><span className={styles.mono}>97.8</span>%</div>
-          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>+5.2pp vs prior</div>
-          <div className={styles.kpiInsight}>3.8pp above sector average of 94%</div>
+          <div className={styles.kpiValue}><span className={styles.mono}>{STOCK_AVAIL_AFTER}</span>%</div>
+          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>+{(STOCK_AVAIL_AFTER - 82.1).toFixed(1)}pp vs baseline</div>
+          <div className={styles.kpiInsight}>2.4pp above sector average of 94%</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>Working Capital Released</div>
-          <div className={styles.kpiValue}>EGP <span className={styles.mono}>12.6M</span></div>
-          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>+31.2% vs prior</div>
-          <div className={styles.kpiInsight}>Cash freed through optimised payment scheduling</div>
+          <div className={styles.kpiValue}><span className={styles.mono}>{formatUSD(2_600_000, { compact: true })}</span></div>
+          <div className={styles.kpiDelta} style={{ color: 'var(--ok)' }}>61% of trapped capital freed</div>
+          <div className={styles.kpiInsight}>DIO reduced from 31 to 12 days</div>
         </div>
       </div>
 
@@ -161,7 +169,7 @@ export default function CommandBridgePanel() {
                   </div>
                   <div className={styles.tooltipRow}>
                     <span>{hoveredBranch.region}</span>
-                    <span className={styles.mono}>Rev: EGP {(hoveredBranch.monthlyRevenue / 1000).toFixed(0)}K/mo</span>
+                    <span className={styles.mono}>Rev: ${(hoveredBranch.monthlyRevenue / 1000).toFixed(0)}K/mo</span>
                   </div>
                 </div>
               )}
@@ -232,22 +240,22 @@ export default function CommandBridgePanel() {
       <div className={styles.roiStrip}>
         <div className={styles.roiItem}>
           <span className={styles.roiLabel}>Annual Value Generated</span>
-          <span className={`${styles.mono} ${styles.roiValue}`}>EGP 39.4M</span>
+          <span className={`${styles.mono} ${styles.roiValue}`}>{formatUSD(ANNUAL_VALUE_USD, { compact: true })}</span>
         </div>
         <div className={styles.roiDivider} />
         <div className={styles.roiItem}>
           <span className={styles.roiLabel}>ROI on Platform</span>
-          <span className={`${styles.mono} ${styles.roiValue}`}>7.3x</span>
+          <span className={`${styles.mono} ${styles.roiValue}`}>{ROI}x</span>
         </div>
         <div className={styles.roiDivider} />
         <div className={styles.roiItem}>
           <span className={styles.roiLabel}>Sales Cycle Compression</span>
-          <span className={`${styles.mono} ${styles.roiValue}`}>6.0d → 4.2d</span>
+          <span className={`${styles.mono} ${styles.roiValue}`}>{SALES_CYCLE_BEFORE}d → {SALES_CYCLE_AFTER}d</span>
         </div>
         <div className={styles.roiDivider} />
         <div className={styles.roiItem}>
           <span className={styles.roiLabel}>Margin Expansion</span>
-          <span className={`${styles.mono} ${styles.roiValue}`}>28.1% → 38.4%</span>
+          <span className={`${styles.mono} ${styles.roiValue}`}>{GROSS_MARGIN_BEFORE}% → {GROSS_MARGIN_AFTER}%</span>
         </div>
       </div>
     </div>

@@ -92,7 +92,7 @@ function buildBranches(): Branch[] {
 
       branches.push({
         id: `BR-${prefix}-${String(idx).padStart(3, '0')}`,
-        name: `El Ezaby ${String(district)} Branch ${i + 1}`,
+        name: `Branch-${String(district).replace(/\s+/g, '')}-${i + 1}`,
         region: reg,
         district: String(district),
         lat,

@@ -13,10 +13,6 @@ export default function ClientLayout() {
     <div className="dashboard-shell">
       <Sidebar role="client" />
       <div className="main-area">
-        <div className="client-brand-bar">
-          <img src="/elezaby-logo.png" alt="El Ezaby" height={28} />
-          <span className="powered-by-text">powered by Makkook</span>
-        </div>
         <LiveAiBar />
         <div className="panel-scroll">
           <Routes>

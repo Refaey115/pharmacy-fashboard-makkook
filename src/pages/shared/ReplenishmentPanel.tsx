@@ -3,6 +3,8 @@ import { generateDecisions } from '../../data/decisionGen';
 import type { Decision } from '../../data/decisionGen';
 import { SUPPLIERS } from '../../data/suppliers';
 import SpeakerHint from '../../components/SpeakerHint';
+import { CUMULATIVE } from '../../data/canonicalNumbers';
+import { formatUSD } from '../../utils/formatCurrency';
 import styles from './ReplenishmentPanel.module.css';
 
 const PIPELINE_STEPS = ['Demand Signal', 'Reorder Point Hit', 'Supplier Decision', 'PO Generated', 'Dispatch', 'Branch Receipt'];
@@ -172,7 +174,7 @@ export default function ReplenishmentPanel() {
                 </div>
                 {showFootnote && (
                   <div className={styles.footnote}>
-                    EGP 12.6M working capital released · 7.3x ROI on platform · Annual value generated: EGP 39.4M
+                    $2.6M working capital released · 7.3x ROI on platform · Annual value generated: $8.2M Year 1
                   </div>
                 )}
               </div>
@@ -181,20 +183,20 @@ export default function ReplenishmentPanel() {
 
           <div className={styles.metricsRow}>
             <div className={styles.metricTile}>
-              <div className={`${styles.mono} ${styles.metricValue}`}>1,847</div>
-              <div className={styles.metricLabel}>POs Fired Today</div>
+              <div className={`${styles.mono} ${styles.metricValue}`}>12</div>
+              <div className={styles.metricLabel}>Cycles Today</div>
+            </div>
+            <div className={styles.metricTile}>
+              <div className={`${styles.mono} ${styles.metricValue}`}>{CUMULATIVE['24h'].value}</div>
+              <div className={styles.metricLabel}>Captured Today</div>
             </div>
             <div className={styles.metricTile}>
               <div className={`${styles.mono} ${styles.metricValue}`}>412,890</div>
               <div className={styles.metricLabel}>Units in Transit</div>
             </div>
             <div className={styles.metricTile}>
-              <div className={`${styles.mono} ${styles.metricValue}`}>23</div>
-              <div className={styles.metricLabel}>Pending Confirmations</div>
-            </div>
-            <div className={styles.metricTile}>
-              <div className={`${styles.mono} ${styles.metricValue}`}>EGP 47.3M</div>
-              <div className={styles.metricLabel}>Total Value in Cycle</div>
+              <div className={`${styles.mono} ${styles.metricValue}`} style={{ fontSize: 12 }}>Auto-runs every 4 min</div>
+              <div className={styles.metricLabel}>Next cycle: {Math.floor(Math.random() * 3) + 1}m away</div>
             </div>
           </div>
         </div>
@@ -212,7 +214,7 @@ export default function ReplenishmentPanel() {
                   />
                 </div>
                 <span className={styles.mono} style={{ fontSize: 11, color: 'var(--text-3)' }}>
-                  EGP {(s.todayPoVolume / 1000).toFixed(0)}K
+                  {formatUSD(s.todayPoVolume, { compact: true })}
                 </span>
               </div>
             ))}

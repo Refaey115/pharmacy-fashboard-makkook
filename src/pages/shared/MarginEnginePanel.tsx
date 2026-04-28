@@ -12,6 +12,16 @@ import {
 } from 'chart.js';
 import { MONTHLY_SERIES } from '../../data/timeseries';
 import SpeakerHint from '../../components/SpeakerHint';
+import {
+  SALES_CYCLE_AFTER, SALES_CYCLE_BEFORE,
+  GROSS_MARGIN_AFTER, GROSS_MARGIN_BEFORE,
+  STOCK_AVAIL_AFTER, STOCK_AVAIL_BEFORE,
+  HOLDING_DAYS_AFTER, HOLDING_DAYS_BEFORE,
+  WORKING_CAPITAL_RELEASED_USD, ANNUAL_VALUE_USD, ROI,
+  AI_CONFIDENCE,
+  VALUE_DECOMPOSITION,
+} from '../../data/canonicalNumbers';
+import { formatUSD } from '../../utils/formatCurrency';
 import styles from './MarginEnginePanel.module.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Legend);
@@ -24,25 +34,25 @@ interface ChainNode {
 }
 
 const CHAIN_NODES: ChainNode[] = [
-  { label: 'Faster Replenishment', value: 'Every 4 seconds', delay: 0 },
-  { label: 'Sales Cycle', value: '4.2 days', delay: 200 },
-  { label: 'Inventory Turnover', value: '8.7x / yr', delay: 400 },
-  { label: 'Working Capital', value: 'EGP 12.6M released', delay: 600 },
-  { label: 'Carrying Cost', value: '-34%', delay: 800 },
-  { label: 'Gross Margin', value: '+38.4%', delay: 1000, highlight: true },
+  { label: 'Faster Replenishment', value: 'Every 4 minutes', delay: 0 },
+  { label: 'Sales Cycle', value: `${SALES_CYCLE_AFTER} days`, delay: 200 },
+  { label: 'Inventory Turnover', value: '14x / yr', delay: 400 },
+  { label: 'Working Capital', value: `${formatUSD(WORKING_CAPITAL_RELEASED_USD, { compact: true })} released`, delay: 600 },
+  { label: 'Carrying Cost', value: '-61%', delay: 800 },
+  { label: 'Gross Margin', value: `+${GROSS_MARGIN_AFTER}%`, delay: 1000, highlight: true },
 ];
 
 const BEFORE_AFTER = [
-  { label: 'Sales Cycle', before: '6.0 days', after: '4.2 days' },
-  { label: 'Gross Margin', before: '28.1%', after: '38.4%' },
-  { label: 'Stock Availability', before: '82.6%', after: '97.8%' },
-  { label: 'Holding Days', before: '31 days', after: '12 days' },
-  { label: 'Working Capital', before: 'EGP 4.2M', after: 'EGP 12.6M' },
-  { label: 'AI Decision Accuracy', before: '88.4%', after: '97.8%' },
+  { label: 'Sales Cycle',         before: `${SALES_CYCLE_BEFORE} days`,   after: `${SALES_CYCLE_AFTER} days` },
+  { label: 'Gross Margin',        before: `${GROSS_MARGIN_BEFORE}%`,       after: `${GROSS_MARGIN_AFTER}%` },
+  { label: 'Stock Availability',  before: `${STOCK_AVAIL_BEFORE}%`,        after: `${STOCK_AVAIL_AFTER}%` },
+  { label: 'Holding Days',        before: `${HOLDING_DAYS_BEFORE} days`,   after: `${HOLDING_DAYS_AFTER} days` },
+  { label: 'Working Capital',     before: '$51M tied up',                  after: `${formatUSD(WORKING_CAPITAL_RELEASED_USD, { compact: true })} released` },
+  { label: 'AI Decision Conf.',   before: '78.2%',                         after: `${AI_CONFIDENCE}%` },
 ];
 
-const ANNUAL_VALUE_LABELS = ['Revenue Uplift', 'Waste Reduction', 'Working Capital', 'Distribution', 'Stockout Prevention'];
-const ANNUAL_VALUE_DATA = [18.4, 4.6, 6.7, 2.1, 7.6];
+const ANNUAL_VALUE_LABELS = VALUE_DECOMPOSITION.map(v => v.label);
+const ANNUAL_VALUE_DATA   = VALUE_DECOMPOSITION.map(v => v.valueM);
 
 export default function MarginEnginePanel() {
   const [visibleNodes, setVisibleNodes] = useState<boolean[]>(CHAIN_NODES.map(() => false));
@@ -122,7 +132,7 @@ export default function MarginEnginePanel() {
     labels: ANNUAL_VALUE_LABELS,
     datasets: [
       {
-        label: 'Value (EGP M)',
+        label: 'Value ($M)',
         data: ANNUAL_VALUE_DATA,
         backgroundColor: ['rgba(225,84,29,0.85)', 'rgba(74,222,128,0.7)', 'rgba(96,165,250,0.7)', 'rgba(167,139,250,0.7)', 'rgba(245,158,11,0.7)'],
         borderRadius: 4,
@@ -142,7 +152,7 @@ export default function MarginEnginePanel() {
       x: {
         ticks: { color: '#9B9B9B', font: { size: 10 as const } },
         grid: { color: 'rgba(255,255,255,0.04)' },
-        title: { display: true, text: 'EGP M', color: '#9B9B9B', font: { size: 10 as const } },
+        title: { display: true, text: '$M', color: '#9B9B9B', font: { size: 10 as const } },
       },
       y: {
         ticks: { color: '#9B9B9B', font: { size: 10 as const } },
@@ -211,7 +221,7 @@ export default function MarginEnginePanel() {
 
         {/* Annual value chart */}
         <div className={styles.chartCard}>
-          <div className={styles.chartTitle}>Annual Value Generated — EGP 39.4M</div>
+          <div className={styles.chartTitle}>Annual Value Generated — {formatUSD(ANNUAL_VALUE_USD, { compact: true })} Year 1</div>
           <div style={{ height: '240px' }}>
             <Bar data={annualData} options={annualOptions} />
           </div>
@@ -222,27 +232,27 @@ export default function MarginEnginePanel() {
       <div className={styles.summaryStrip}>
         <div className={styles.summaryItem}>
           <span className={styles.summaryLabel}>Sales Cycle Compression</span>
-          <span className={`${styles.mono} ${styles.summaryValue}`}>6.0d → 4.2d</span>
+          <span className={`${styles.mono} ${styles.summaryValue}`}>{SALES_CYCLE_BEFORE}d → {SALES_CYCLE_AFTER}d</span>
         </div>
         <div className={styles.summaryDivider} />
         <div className={styles.summaryItem}>
           <span className={styles.summaryLabel}>Margin Expansion</span>
-          <span className={`${styles.mono} ${styles.summaryValue}`}>28.1% → 38.4%</span>
+          <span className={`${styles.mono} ${styles.summaryValue}`}>{GROSS_MARGIN_BEFORE}% → {GROSS_MARGIN_AFTER}%</span>
         </div>
         <div className={styles.summaryDivider} />
         <div className={styles.summaryItem}>
           <span className={styles.summaryLabel}>Working Capital Released</span>
-          <span className={`${styles.mono} ${styles.summaryValue}`}>EGP 12.6M</span>
+          <span className={`${styles.mono} ${styles.summaryValue}`}>{formatUSD(WORKING_CAPITAL_RELEASED_USD, { compact: true })}</span>
         </div>
         <div className={styles.summaryDivider} />
         <div className={styles.summaryItem}>
           <span className={styles.summaryLabel}>Annual Value Generated</span>
-          <span className={`${styles.mono} ${styles.summaryValue}`}>EGP 39.4M</span>
+          <span className={`${styles.mono} ${styles.summaryValue}`}>{formatUSD(ANNUAL_VALUE_USD, { compact: true })} Year 1</span>
         </div>
         <div className={styles.summaryDivider} />
         <div className={styles.summaryItem}>
           <span className={styles.summaryLabel}>Platform ROI</span>
-          <span className={`${styles.mono} ${styles.summaryValue}`}>7.3x</span>
+          <span className={`${styles.mono} ${styles.summaryValue}`}>{ROI}x</span>
         </div>
       </div>
     </div>

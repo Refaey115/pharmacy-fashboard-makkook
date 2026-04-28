@@ -35,16 +35,7 @@ export default function Sidebar({ role }: Props) {
     <aside className={styles.sidebar}>
       {/* Brand */}
       <div className={styles.brand}>
-        {isAdmin ? (
-          <img src="/makkook-logo.png" alt="Makkook" className={styles.logoAdmin} />
-        ) : (
-          <div className={styles.clientBrand}>
-            <div className={styles.elezabyBox}>
-              <img src="/elezaby-logo.png" alt="El Ezaby" className={styles.logoClient} />
-            </div>
-            <div className={styles.subtitleClient}>Powered by <span>Makkook.AI</span></div>
-          </div>
-        )}
+        <img src="/makkook-logo.png" alt="Makkook" className={styles.logoAdmin} />
       </div>
 
       {/* AI live status */}
