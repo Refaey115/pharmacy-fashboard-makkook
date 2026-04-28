@@ -11,6 +11,7 @@ import { generateDecisions } from '../../data/decisionGen';
 import type { Decision } from '../../data/decisionGen';
 import SpeakerHint from '../../components/SpeakerHint';
 import { CUMULATIVE, CONFIDENCE_HIST } from '../../data/canonicalNumbers';
+import { getRationale, fillRationale, buildRationaleVars } from '../../data/rationaleLibrary';
 import styles from './LedgerPanel.module.css';
 
 type TimeWindow = '24h' | 'week' | 'month' | 'year';
@@ -256,7 +257,16 @@ export default function LedgerPanel() {
             </div>
             <div className={styles.modalBody}>
               <div className={styles.mathSection}>
-                <div className={styles.mathLabel}>Mathematical Explanation</div>
+                <div className={styles.mathLabel}>Decision Rationale</div>
+                <div className={styles.mathText}>
+                  {fillRationale(
+                    getRationale(modalDecision.type, modalDecision.id).template,
+                    buildRationaleVars(modalDecision)
+                  )}
+                </div>
+              </div>
+              <div className={styles.mathSection}>
+                <div className={styles.mathLabel}>System Explanation</div>
                 <div className={styles.mathText}>{modalDecision.mathExplanation}</div>
               </div>
               <div className={styles.mathGrid}>

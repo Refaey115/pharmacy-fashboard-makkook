@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { MONTHLY_SERIES } from '../../data/timeseries';
 import SpeakerHint from '../../components/SpeakerHint';
+import ShowMath from '../../components/ShowMath';
 import {
   SALES_CYCLE_AFTER, SALES_CYCLE_BEFORE,
   GROSS_MARGIN_AFTER, GROSS_MARGIN_BEFORE,
@@ -221,7 +222,23 @@ export default function MarginEnginePanel() {
 
         {/* Annual value chart */}
         <div className={styles.chartCard}>
-          <div className={styles.chartTitle}>Annual Value Generated — {formatUSD(ANNUAL_VALUE_USD, { compact: true })} Year 1</div>
+          <div className={styles.chartTitle}>
+            Annual Value Generated —{' '}
+            <ShowMath
+              formula="Revenue Uplift + Working Capital + Waste + Bulk Discount + Distribution"
+              inputs={[
+                { label: 'Revenue uplift', value: '$3.5M/yr' },
+                { label: 'Working capital (one-time)', value: '$2.6M' },
+                { label: 'Waste reduction', value: '$1.0M/yr' },
+                { label: 'Bulk discount capture', value: '$0.84M/yr' },
+                { label: 'Distribution efficiency', value: '$0.21M/yr' },
+              ]}
+              output="$8.2M Year 1 ($5.55M ongoing)"
+              source="Pharmacy retail benchmarks (Retalon, Netstock 2024-25)"
+            >
+              {formatUSD(ANNUAL_VALUE_USD, { compact: true })} Year 1
+            </ShowMath>
+          </div>
           <div style={{ height: '240px' }}>
             <Bar data={annualData} options={annualOptions} />
           </div>

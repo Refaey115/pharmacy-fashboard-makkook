@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
-import { BRANCHES } from '../../data/branches';
-import type { Branch } from '../../data/branches';
 import { SKUS } from '../../data/skus';
 import { SEASONAL_EVENTS } from '../../data/seasonality';
 import SpeakerHint from '../../components/SpeakerHint';
+import RegionalHealthBars from '../../components/RegionalHealthBars';
+import ShowMath from '../../components/ShowMath';
 import {
   BRANCHES_COUNT, SKUS_COUNT, DECISIONS_PER_DAY,
   SALES_CYCLE_AFTER, SALES_CYCLE_BEFORE,
@@ -35,29 +35,11 @@ function useCountUp(target: number, duration: number, delay: number = 0) {
   return value;
 }
 
-function toSvgX(lng: number, W: number) {
-  return 10 + ((lng - 24.5) / (36.5 - 24.5)) * (W - 20);
-}
-function toSvgY(lat: number, H: number) {
-  return H - 10 - ((lat - 22.0) / (31.8 - 22.0)) * (H - 20);
-}
-
-function healthColor(score: number) {
-  if (score >= 75) return 'var(--ok)';
-  if (score >= 55) return 'var(--warn)';
-  if (score >= 40) return '#F97316';
-  return 'var(--err)';
-}
-
-const W = 800;
-const H = 300;
-
 export default function CommandBridgePanel() {
   const branchCount = useCountUp(BRANCHES_COUNT, 1200, 0);
   const skuCount = useCountUp(SKUS_COUNT, 1400, 800);
   const decisionRaw = useCountUp(DECISIONS_PER_DAY, 1600, 1600);
 
-  const [hoveredBranch, setHoveredBranch] = useState<Branch | null>(null);
   const [optimizeCounter, setOptimizeCounter] = useState(4);
   const optimizeRef = useRef(4);
 
@@ -91,7 +73,20 @@ export default function CommandBridgePanel() {
               <div className={styles.heroLabel}>Active SKUs Managed</div>
             </div>
             <div className={styles.heroStat}>
-              <div className={styles.heroNumber}>{decisionStr}</div>
+              <div className={styles.heroNumber}>
+                <ShowMath
+                  formula="branches × active SKUs × 1 daily evaluation cycle"
+                  inputs={[
+                    { label: 'Branches', value: '500' },
+                    { label: 'Active SKUs', value: '70,247' },
+                    { label: 'Eval cycles/day', value: '1' },
+                  ]}
+                  output="35,123,500 decisions/day"
+                  source="Standard multi-echelon replenishment evaluation model"
+                >
+                  {decisionStr}
+                </ShowMath>
+              </div>
               <div className={styles.heroLabel}>AI Decisions Today</div>
             </div>
           </div>
@@ -129,57 +124,18 @@ export default function CommandBridgePanel() {
         </div>
       </div>
 
-      {/* Map + SKU row */}
+      {/* Regional health + SKU row */}
       <div className={styles.bottomRow}>
-        {/* SVG heatmap */}
-        <SpeakerHint text="Each dot is a real branch. Green = health above 75. This is a live optimized network — point out the density in Greater Cairo vs sparse Upper Egypt.">
+        {/* Regional Health Bars */}
+        <SpeakerHint text="This is the live network health breakdown. Each bar shows what percentage of branches in each region are fully stocked vs. at risk. Green dominates — that is the DIOS effect.">
           <div className={styles.mapCard}>
             <div className={styles.mapHeader}>
-              <span className={styles.sectionTitle}>Branch Network — Egypt</span>
+              <span className={styles.sectionTitle}>Network Health by Region</span>
               <span className={styles.mapCounter}>
-                All <strong>500</strong> branches optimized in the last <strong className={styles.mono}>{optimizeCounter}</strong>s
+                Updated every cycle · <strong className={styles.mono}>{optimizeCounter}</strong>s ago
               </span>
             </div>
-            <div className={styles.mapWrap}>
-              <svg
-                viewBox={`0 0 ${W} ${H}`}
-                preserveAspectRatio="xMidYMid meet"
-                style={{ width: '100%', height: '100%' }}
-              >
-                {BRANCHES.map(b => (
-                  <circle
-                    key={b.id}
-                    cx={toSvgX(b.lng, W)}
-                    cy={toSvgY(b.lat, H)}
-                    r={hoveredBranch?.id === b.id ? 5 : 3}
-                    fill={healthColor(b.healthScore)}
-                    opacity={hoveredBranch ? (hoveredBranch.id === b.id ? 1 : 0.4) : 0.75}
-                    style={{ cursor: 'pointer', transition: 'opacity 0.15s, r 0.15s' }}
-                    onMouseEnter={() => setHoveredBranch(b)}
-                    onMouseLeave={() => setHoveredBranch(null)}
-                  />
-                ))}
-              </svg>
-              {hoveredBranch && (
-                <div className={styles.mapTooltip}>
-                  <div className={styles.tooltipName}>{hoveredBranch.name}</div>
-                  <div className={styles.tooltipRow}>
-                    <span>{hoveredBranch.district}</span>
-                    <span className={styles.mono}>Health: {hoveredBranch.healthScore}</span>
-                  </div>
-                  <div className={styles.tooltipRow}>
-                    <span>{hoveredBranch.region}</span>
-                    <span className={styles.mono}>Rev: ${(hoveredBranch.monthlyRevenue / 1000).toFixed(0)}K/mo</span>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className={styles.mapLegend}>
-              <span className={styles.legendDot} style={{ background: 'var(--ok)' }} /> Optimal (75-100)
-              <span className={styles.legendDot} style={{ background: 'var(--warn)' }} /> Monitor (55-74)
-              <span className={styles.legendDot} style={{ background: '#F97316' }} /> Attention (40-54)
-              <span className={styles.legendDot} style={{ background: 'var(--err)' }} /> Critical (&lt;40)
-            </div>
+            <RegionalHealthBars />
           </div>
         </SpeakerHint>
 
@@ -240,7 +196,22 @@ export default function CommandBridgePanel() {
       <div className={styles.roiStrip}>
         <div className={styles.roiItem}>
           <span className={styles.roiLabel}>Annual Value Generated</span>
-          <span className={`${styles.mono} ${styles.roiValue}`}>{formatUSD(ANNUAL_VALUE_USD, { compact: true })}</span>
+          <span className={`${styles.mono} ${styles.roiValue}`}>
+            <ShowMath
+              formula="Revenue Uplift + Working Capital + Waste + Bulk Discount + Distribution"
+              inputs={[
+                { label: 'Revenue uplift (stockout reduction)', value: '$3.5M/yr' },
+                { label: 'Working capital released (one-time)', value: '$2.6M' },
+                { label: 'Waste & expiry reduction', value: '$1.0M/yr' },
+                { label: 'Bulk discount capture', value: '$0.84M/yr' },
+                { label: 'Distribution efficiency', value: '$0.21M/yr' },
+              ]}
+              output="$8.2M Year 1 ($5.55M ongoing)"
+              source="Pharmacy retail benchmarks (Retalon, Netstock 2024-25)"
+            >
+              {formatUSD(ANNUAL_VALUE_USD, { compact: true })}
+            </ShowMath>
+          </span>
         </div>
         <div className={styles.roiDivider} />
         <div className={styles.roiItem}>
