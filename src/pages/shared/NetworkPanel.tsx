@@ -9,6 +9,7 @@ import {
 } from 'chart.js';
 import { SKUS } from '../../data/skus';
 import SpeakerHint from '../../components/SpeakerHint';
+import RegionalForecastSection from './RegionalForecastSection';
 import styles from './NetworkPanel.module.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
@@ -178,12 +179,15 @@ export default function NetworkPanel() {
       {/* Holding days chart */}
       <div className={styles.chartCard}>
         <div className={styles.cardTitle} style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
-          Inventory Holding Days — Before vs After DIOS
+          Inventory Holding Days — Before vs After Optimisation
         </div>
         <div style={{ padding: '16px', height: '220px' }}>
           <Bar data={holdingData} options={holdingOptions} />
         </div>
       </div>
+
+      {/* Weekly forecast */}
+      <RegionalForecastSection />
     </div>
   );
 }

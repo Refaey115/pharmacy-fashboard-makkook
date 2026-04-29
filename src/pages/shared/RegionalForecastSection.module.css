@@ -1,0 +1,326 @@
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ── Section header ───────────────────────────────────────────────────────── */
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.sectionSub {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.alertBadge { display: flex; gap: 8px; flex-shrink: 0; }
+
+.alertPill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+/* ── SKU selector ─────────────────────────────────────────────────────────── */
+.skuSelector {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.01);
+}
+
+.selectorLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-3);
+  padding-top: 6px;
+  flex-shrink: 0;
+}
+
+.skuPills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.skuPill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.skuPill:hover {
+  border-color: rgba(225,84,29,0.4);
+  background: rgba(225,84,29,0.04);
+}
+
+.skuPillActive {
+  border-color: var(--accent);
+  background: rgba(225,84,29,0.1);
+}
+
+.skuCode {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.skuName {
+  font-size: 9px;
+  color: var(--text-3);
+  margin-top: 1px;
+  white-space: nowrap;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skuPillActive .skuCode { color: var(--accent); }
+
+/* ── SKU info bar ─────────────────────────────────────────────────────────── */
+.skuInfoBar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(225,84,29,0.03);
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.skuInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: 24px;
+  margin-right: 24px;
+  border-right: 1px solid var(--border);
+}
+
+.skuInfoItem:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+.skuInfoLabel {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-3);
+}
+
+.skuInfoVal {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ── Main row ─────────────────────────────────────────────────────────────── */
+.mainRow {
+  display: grid;
+  grid-template-columns: 3fr 1.6fr;
+  gap: 0;
+}
+
+/* ── Chart card ───────────────────────────────────────────────────────────── */
+.chartCard {
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+}
+
+.regionToggles {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.regionToggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-3);
+  transition: all 0.15s;
+}
+
+.regionActive  { transition: all 0.15s; }
+.regionInactive { opacity: 0.45; }
+
+.regionDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.chartNote {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--text-3);
+  font-style: italic;
+  text-align: center;
+}
+
+/* ── Dispatch card ────────────────────────────────────────────────────────── */
+.dispatchCard {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dispatchTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.dispatchSub {
+  font-size: 10px;
+  color: var(--text-3);
+  margin-top: -4px;
+  margin-bottom: 4px;
+}
+
+.dispatchList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dispatchRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  transition: background 0.15s;
+}
+
+.dispatchRow:last-child { border-bottom: none; }
+.dispatchRow:hover { background: rgba(255,255,255,0.02); }
+
+.priorityBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+
+.dispatchRegion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 4px;
+}
+
+.dispatchDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dispatchRegionName {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.dispatchWh {
+  font-size: 9px;
+  color: var(--text-3);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.dispatchMetrics {
+  display: flex;
+  gap: 0;
+  padding-left: 4px;
+}
+
+.dispatchMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+
+.dispatchMetricVal {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.dispatchMetricLbl {
+  font-size: 9px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ── Summary ──────────────────────────────────────────────────────────────── */
+.dispatchSummary {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .mainRow          { grid-template-columns: 1fr; }
+  .chartCard        { border-right: none; border-bottom: 1px solid var(--border); }
+}
