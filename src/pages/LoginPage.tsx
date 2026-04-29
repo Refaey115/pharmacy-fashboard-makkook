@@ -38,7 +38,7 @@ export default function LoginPage() {
         <div className={styles.heroInner}>
           <img src="/makkook-logo.png" alt="Makkook" className={styles.heroLogo} />
           <h1 className={styles.heroHeadline}>
-            AI-powered pharmacy<br />intelligence at scale.
+            Makkook
           </h1>
           <p className={styles.heroSub}>
             Real-time autonomous decisions that prevent stockouts,
@@ -69,7 +69,6 @@ export default function LoginPage() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <img src="/makkook-logo.png" alt="Makkook" className={styles.makkookSmall} />
-            <p className={styles.cardTagline}>AI-powered pharmacy intelligence at scale.</p>
           </div>
 
           <h2 className={styles.heading}>Sign in to your workspace</h2>

@@ -15,16 +15,17 @@ export const AVG_INVENTORY_BEFORE    = 51_000_000;   // 31-day holding × COGS
 export const AVG_INVENTORY_AFTER     = 19_700_000;   // 12-day holding × COGS
 
 // ── Performance KPIs (after AI) ───────────────────────────────────────────────
-export const SALES_CYCLE_AFTER       = 4.2;   // days
-export const SALES_CYCLE_BEFORE      = 6.0;   // days
+// Sales cycle = full inventory cycle (procurement → branch → sold). Egyptian pharma norm: 24-30 days.
+export const SALES_CYCLE_AFTER       = 22;    // days  (AI-optimised: down from 30)
+export const SALES_CYCLE_BEFORE      = 30;    // days  (baseline, industry average)
 export const GROSS_MARGIN_AFTER      = 38.4;  // %
 export const GROSS_MARGIN_BEFORE     = 28.1;  // %
-export const STOCK_AVAIL_AFTER       = 96.4;  // % — varied from 97.8
+export const STOCK_AVAIL_AFTER       = 96.4;  // %
 export const STOCK_AVAIL_BEFORE      = 82.1;  // %
 export const AI_CONFIDENCE           = 94.2;  // %
 export const AI_FORECAST_ACCURACY    = 91.7;  // %
-export const HOLDING_DAYS_AFTER      = 12;    // days
-export const HOLDING_DAYS_BEFORE     = 31;    // days
+export const HOLDING_DAYS_AFTER      = 22;    // days — matches SALES_CYCLE_AFTER
+export const HOLDING_DAYS_BEFORE     = 30;    // days — matches SALES_CYCLE_BEFORE
 
 // ── Financial KPIs (USD) ─────────────────────────────────────────────────────
 export const WORKING_CAPITAL_RELEASED_USD = 2_600_000;   // $2.6M

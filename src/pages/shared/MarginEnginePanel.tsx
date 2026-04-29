@@ -57,10 +57,10 @@ interface ChainNode {
 
 const CHAIN_NODES: ChainNode[] = [
   { label: 'Faster Replenishment', value: 'Every 4 minutes', delay: 0 },
-  { label: 'Sales Cycle', value: `${SALES_CYCLE_AFTER} days`, delay: 200 },
-  { label: 'Inventory Turnover', value: '14x / yr', delay: 400 },
+  { label: 'Inventory Cycle', value: `${SALES_CYCLE_AFTER} days`, delay: 200 },
+  { label: 'Inventory Turnover', value: '17x / yr', delay: 400 },
   { label: 'Working Capital', value: `${formatUSD(WORKING_CAPITAL_RELEASED_USD, { compact: true })} released`, delay: 600 },
-  { label: 'Carrying Cost', value: '-61%', delay: 800 },
+  { label: 'Carrying Cost', value: '-27%', delay: 800 },
   { label: 'Gross Margin', value: `+${GROSS_MARGIN_AFTER}%`, delay: 1000, highlight: true },
 ];
 
@@ -69,7 +69,7 @@ const BEFORE_AFTER = [
   { label: 'Gross Margin',        before: `${GROSS_MARGIN_BEFORE}%`,       after: `${GROSS_MARGIN_AFTER}%` },
   { label: 'Stock Availability',  before: `${STOCK_AVAIL_BEFORE}%`,        after: `${STOCK_AVAIL_AFTER}%` },
   { label: 'Holding Days',        before: `${HOLDING_DAYS_BEFORE} days`,   after: `${HOLDING_DAYS_AFTER} days` },
-  { label: 'Working Capital',     before: '$51M tied up',                  after: `${formatUSD(WORKING_CAPITAL_RELEASED_USD, { compact: true })} released` },
+  { label: 'Working Capital',     before: '$48M tied up',                  after: `${formatUSD(WORKING_CAPITAL_RELEASED_USD, { compact: true })} annual saving` },
   { label: 'AI Decision Conf.',   before: '78.2%',                         after: `${AI_CONFIDENCE}%` },
 ];
 
@@ -168,9 +168,9 @@ export default function MarginEnginePanel() {
       y: {
         type: 'linear' as const,
         position: 'left' as const,
-        min: 3.5,
-        max: 7,
-        title: { display: true, text: 'Sales Cycle (days)', color: '#9B9B9B', font: { size: 10 as const } },
+        min: 18,
+        max: 33,
+        title: { display: true, text: 'Inventory Cycle (days)', color: '#9B9B9B', font: { size: 10 as const } },
         ticks: { color: '#9B9B9B', font: { size: 10 as const } },
         grid: { color: 'rgba(255,255,255,0.04)' },
         border: { display: false },

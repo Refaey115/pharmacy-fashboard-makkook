@@ -37,25 +37,25 @@ const PRESETS: Record<PresetKey, Weights> = {
   stock:    { stockAvailability: 92, roiMaximisation: 40, cashFlowSpeed: 38, wasteReduction: 72, distributionSpeed: 68 },
 };
 
-const PRESET_META: Record<PresetKey, { label: string; icon: string; description: string }> = {
+const PRESET_META: Record<PresetKey, { label: string; tag: string; description: string }> = {
   balanced: {
     label: 'Balanced',
-    icon: '⚖️',
+    tag: 'DEFAULT',
     description: 'Equal weight across all objectives. Best for steady-state operations.',
   },
   roi: {
     label: 'ROI Focus',
-    icon: '📈',
+    tag: 'ROI',
     description: 'Prioritises return on capital. Accepts slightly higher stockout risk in low-demand branches.',
   },
   cashflow: {
     label: 'Cash Flow',
-    icon: '💵',
+    tag: 'CASH',
     description: 'Minimises working capital tied up. Just-in-time ordering, reduces holding days aggressively.',
   },
   stock: {
     label: 'Stock Optimisation',
-    icon: '📦',
+    tag: 'STOCK',
     description: 'Maximises product availability. Accepts higher inventory costs to eliminate stockouts.',
   },
 };
@@ -71,11 +71,11 @@ function computeImpact(w: Weights) {
   return {
     stockAvailabilityPct:  +(82 + s * 15.5).toFixed(1),           // 82 – 97.5%
     grossMarginPct:        +(27.5 + r * 12.5).toFixed(1),          // 27.5 – 40%
-    holdingDays:           Math.round(31 - c * 21),                 // 10 – 31 days
+    holdingDays:           Math.round(30 - c * 10),                 // 20 – 30 days
     wasteReductionPct:     Math.round(ws * 80),                     // 0 – 80%
     distributionSavingPct: Math.round(d * 22),                      // 0 – 22%
     annualValueM:          +(3.5 + r * 2.8 + s * 1.4 + c * 1.0 + ws * 0.8 + d * 0.3).toFixed(2), // $3.5 – $9.8M
-    cycleTimeDays:         +(6.2 - c * 2.4 - d * 0.6).toFixed(1), // 3.2 – 6.2 days
+    cycleTimeDays:         +(30 - c * 9 - d * 1.5).toFixed(1),    // 19.5 – 30 days
     roiX:                  +(2.8 + r * 5.5).toFixed(1),            // 2.8 – 8.3×
   };
 }
@@ -312,7 +312,7 @@ export default function StrategyPanel() {
             className={`${styles.presetBtn} ${activePreset === key ? styles.presetActive : ''}`}
             onClick={() => selectPreset(key)}
           >
-            <span className={styles.presetIcon}>{PRESET_META[key].icon}</span>
+            <span className={styles.presetTag}>{PRESET_META[key].tag}</span>
             <div className={styles.presetText}>
               <div className={styles.presetLabel}>{PRESET_META[key].label}</div>
               <div className={styles.presetDesc}>{PRESET_META[key].description}</div>
