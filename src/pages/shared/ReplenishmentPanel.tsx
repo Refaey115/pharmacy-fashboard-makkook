@@ -27,18 +27,26 @@ const TYPE_COLORS: Record<string, string> = {
   'cycle-close': 'var(--ok)',
 };
 
+interface CycleResult {
+  pos: number;
+  transfers: number;
+  branches: number;
+  value: number;
+  duration: string;
+  stockoutsBlocked: number;
+}
+
 export default function ReplenishmentPanel() {
   const [running, setRunning] = useState(false);
   const [cycleComplete, setCycleComplete] = useState(false);
   const [pipelineStep, setPipelineStep] = useState(-1);
   const [idleHighlight, setIdleHighlight] = useState(0);
   const [evalCount, setEvalCount] = useState(0);
-  const [salesCycleDisplay, setSalesCycleDisplay] = useState(4.2);
-  const [marginDisplay, setMarginDisplay] = useState(38.4);
-  const [showFinancial, setShowFinancial] = useState(false);
-  const [showFootnote, setShowFootnote] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [cycleResults, setCycleResults] = useState<CycleResult | null>(null);
   const [feed, setFeed] = useState<Decision[]>([]);
   const [feedFilter, setFeedFilter] = useState('All');
+  const [nextCycleMin] = useState(() => Math.floor(Math.random() * 3) + 1);
 
   const feedSeedRef = useRef(30);
 
@@ -67,51 +75,49 @@ export default function ReplenishmentPanel() {
     if (running) return;
     setRunning(true);
     setCycleComplete(false);
-    setShowFinancial(false);
-    setShowFootnote(false);
-    setSalesCycleDisplay(4.2);
-    setMarginDisplay(38.4);
+    setShowResults(false);
+    setCycleResults(null);
     setEvalCount(0);
     setPipelineStep(0);
 
+    // Pipeline steps spread over 3.5s (each step ~580ms)
     [0, 1, 2, 3, 4, 5].forEach(step => {
-      setTimeout(() => setPipelineStep(step), 400 + step * 300);
+      setTimeout(() => setPipelineStep(step), 300 + step * 580);
     });
 
-    const counterStart = 400;
-    const counterDuration = 1800;
-    const counterTarget = 35124847;
-    const startTime = Date.now() + counterStart;
+    // Counter: 35,124 active SKU-branch positions scanned (those above reorder threshold)
+    const counterTarget = 35_124;
+    const counterDuration = 2800;
+    const startTime = Date.now() + 300;
     const tick = () => {
       const elapsed = Date.now() - startTime;
-      if (elapsed < 0) { setTimeout(tick, 50); return; }
+      if (elapsed < 0) { setTimeout(tick, 30); return; }
       const progress = Math.min(elapsed / counterDuration, 1);
-      setEvalCount(Math.floor(progress * counterTarget));
-      if (progress < 1) setTimeout(tick, 50);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setEvalCount(Math.floor(eased * counterTarget));
+      if (progress < 1) setTimeout(tick, 30);
       else setEvalCount(counterTarget);
     };
-    setTimeout(tick, counterStart);
+    setTimeout(tick, 300);
 
+    // Cycle completes at ~3.5s
     setTimeout(() => {
       setCycleComplete(true);
       setPipelineStep(6);
-    }, 2200);
+      const seed = Date.now();
+      const r = (a: number, b: number) => a + Math.floor(((seed % 997) / 997) * (b - a));
+      setCycleResults({
+        pos:             r(38, 52),
+        transfers:       r(290, 340),
+        branches:        r(487, 496),
+        value:           r(19_800, 28_600),
+        duration:        (1.4 + ((seed % 7) / 10)).toFixed(1),
+        stockoutsBlocked: r(4, 11),
+      });
+    }, 3500);
 
-    setTimeout(() => {
-      setShowFinancial(true);
-      const animStart = Date.now();
-      const animDur = 1500;
-      const tickFin = () => {
-        const prog = Math.min((Date.now() - animStart) / animDur, 1);
-        setSalesCycleDisplay(parseFloat((4.2 - prog * 0.3).toFixed(2)));
-        setMarginDisplay(parseFloat((38.4 + prog * 0.8).toFixed(1)));
-        if (prog < 1) setTimeout(tickFin, 30);
-      };
-      tickFin();
-    }, 3800);
-
-    setTimeout(() => setShowFootnote(true), 5800);
-    setTimeout(() => setRunning(false), 7500);
+    setTimeout(() => setShowResults(true), 3900);
+    setTimeout(() => setRunning(false), 5200);
   }, [running]);
 
   const allTypes = ['All', 'transfer', 'bulk-po', 'shelf-life', 'cash-flow', 'seasonal', 'demand-spike', 'rebalance', 'cycle-close'];
@@ -124,25 +130,28 @@ export default function ReplenishmentPanel() {
       <div className={styles.topRow}>
         {/* Left: Pipeline + Run */}
         <div className={styles.pipelineCard}>
-          <SpeakerHint text="Click Run Now. This simulates a full replenishment cycle for 500 branches, 70,247 SKUs. Watch the counter — that is how many decisions DIOS evaluated in under 2 seconds.">
+          <SpeakerHint text="Click Run Cycle to simulate one full replenishment pass across 500 branches. The engine scans 35,124 active SKU-branch positions and generates purchase orders + inter-branch transfers in under 2 seconds.">
             <div className={styles.runArea}>
               <div className={styles.runHeader}>
                 <div>
                   <div className={styles.cardTitle}>Replenishment Engine</div>
-                  <div className={styles.cardSub}>Full network optimization cycle · 500 branches · 70,247 SKUs</div>
+                  <div className={styles.cardSub}>Automated cycle · 500 branches · 35,124 active positions monitored</div>
                 </div>
                 <button
                   className={`${styles.runBtn} ${running ? styles.running : ''}`}
                   onClick={handleRun}
                   disabled={running}
                 >
-                  {running ? 'Running...' : 'Run Now'}
+                  {running ? 'Running…' : 'Run Cycle'}
                 </button>
               </div>
 
               <div className={styles.counterWrap}>
-                <span className={styles.counterLabel}>Decisions evaluated</span>
+                <span className={styles.counterLabel}>Active inventory positions scanned</span>
                 <span className={`${styles.mono} ${styles.counterValue}`}>{evalCount.toLocaleString()}</span>
+                {evalCount > 0 && evalCount < 35_124 && (
+                  <span className={styles.counterSub}>of 35,124 monitored positions</span>
+                )}
               </div>
 
               <div className={styles.pipeline}>
@@ -154,7 +163,7 @@ export default function ReplenishmentPanel() {
                       key={step}
                       className={`${styles.pipeStep} ${isActive ? styles.active : ''} ${isDone ? styles.done : ''} ${!running && !isActive && !isDone && idleHighlight === idx ? styles.idlePulse : ''}`}
                     >
-                      <div className={styles.stepNum}>{isDone ? '\u2713' : idx + 1}</div>
+                      <div className={styles.stepNum}>{isDone ? '✓' : idx + 1}</div>
                       <div className={styles.stepLabel}>{step}</div>
                     </div>
                   );
@@ -163,32 +172,38 @@ export default function ReplenishmentPanel() {
             </div>
           </SpeakerHint>
 
-          {cycleComplete && showFinancial && (
-            <SpeakerHint text="This is the causal chain. Faster cycle = higher turnover = released working capital = margin expansion. The numbers move live to show the compounding effect.">
-              <div className={styles.financialPanel}>
-                <div className={styles.financialTitle}>Financial Transformation — Live</div>
-                <div className={styles.financialGrid}>
-                  <div className={styles.financialCard} style={{ borderLeft: '3px solid var(--ok)' }}>
-                    <div className={styles.financialLabel}>Sales Cycle</div>
-                    <div className={styles.financialValue}><span className={styles.mono}>{salesCycleDisplay.toFixed(1)}</span> days</div>
-                    <div className={styles.financialSub} style={{ color: 'var(--ok)' }}>Compressing in real time</div>
-                  </div>
-                  <div className={styles.financialArrow}>
-                    <div className={styles.arrowLabel}>Causal: faster cycles released capital margin lift</div>
-                  </div>
-                  <div className={styles.financialCard} style={{ borderLeft: '3px solid var(--accent)' }}>
-                    <div className={styles.financialLabel}>Gross Margin</div>
-                    <div className={styles.financialValue}><span className={styles.mono}>{marginDisplay.toFixed(1)}</span>%</div>
-                    <div className={styles.financialSub} style={{ color: 'var(--accent)' }}>Expanding via turnover</div>
-                  </div>
+          {cycleComplete && showResults && cycleResults && (
+            <div className={styles.resultsPanel}>
+              <div className={styles.resultsTitle}>Cycle Complete — Actions Executed</div>
+              <div className={styles.resultsGrid}>
+                <div className={styles.resultCard} style={{ borderTop: '3px solid var(--ok)' }}>
+                  <div className={`${styles.mono} ${styles.resultValue}`} style={{ color: 'var(--ok)' }}>{cycleResults.pos}</div>
+                  <div className={styles.resultLabel}>Purchase Orders</div>
                 </div>
-                {showFootnote && (
-                  <div className={styles.footnote}>
-                    $2.6M working capital released · 7.3x ROI on platform · Annual value generated: $8.2M Year 1
+                <div className={styles.resultCard} style={{ borderTop: '3px solid var(--info)' }}>
+                  <div className={`${styles.mono} ${styles.resultValue}`} style={{ color: 'var(--info)' }}>{cycleResults.transfers}</div>
+                  <div className={styles.resultLabel}>Inter-Branch Transfers</div>
+                </div>
+                <div className={styles.resultCard} style={{ borderTop: '3px solid var(--accent)' }}>
+                  <div className={`${styles.mono} ${styles.resultValue}`} style={{ color: 'var(--accent)' }}>{cycleResults.branches}/500</div>
+                  <div className={styles.resultLabel}>Branches Updated</div>
+                </div>
+                <div className={styles.resultCard} style={{ borderTop: '3px solid var(--warn)' }}>
+                  <div className={`${styles.mono} ${styles.resultValue}`} style={{ color: 'var(--warn)' }}>{cycleResults.stockoutsBlocked}</div>
+                  <div className={styles.resultLabel}>Stockouts Blocked</div>
+                </div>
+                <div className={styles.resultCard} style={{ borderTop: '3px solid #a78bfa' }}>
+                  <div className={`${styles.mono} ${styles.resultValue}`} style={{ color: '#a78bfa' }}>
+                    ${cycleResults.value.toLocaleString()}
                   </div>
-                )}
+                  <div className={styles.resultLabel}>Value Captured</div>
+                </div>
+                <div className={styles.resultCard} style={{ borderTop: '3px solid var(--text-3)' }}>
+                  <div className={`${styles.mono} ${styles.resultValue}`} style={{ color: 'var(--text-2)' }}>{cycleResults.duration}s</div>
+                  <div className={styles.resultLabel}>Cycle Duration</div>
+                </div>
               </div>
-            </SpeakerHint>
+            </div>
           )}
 
           <div className={styles.metricsRow}>
@@ -201,12 +216,12 @@ export default function ReplenishmentPanel() {
               <div className={styles.metricLabel}>Captured Today</div>
             </div>
             <div className={styles.metricTile}>
-              <div className={`${styles.mono} ${styles.metricValue}`}>412,890</div>
+              <div className={`${styles.mono} ${styles.metricValue}`}>24,180</div>
               <div className={styles.metricLabel}>Units in Transit</div>
             </div>
             <div className={styles.metricTile}>
-              <div className={`${styles.mono} ${styles.metricValue}`} style={{ fontSize: 12 }}>Auto-runs every 4 min</div>
-              <div className={styles.metricLabel}>Next cycle: {Math.floor(Math.random() * 3) + 1}m away</div>
+              <div className={`${styles.mono} ${styles.metricValue}`} style={{ fontSize: 12 }}>Every 4 min</div>
+              <div className={styles.metricLabel}>Next cycle: {nextCycleMin}m away</div>
             </div>
           </div>
         </div>

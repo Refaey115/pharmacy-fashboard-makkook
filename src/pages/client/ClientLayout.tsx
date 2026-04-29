@@ -1,19 +1,18 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import LiveAiBar from '../../components/LiveAiBar';
 import CommandBridgePanel from '../shared/CommandBridgePanel';
 import ReplenishmentPanel from '../shared/ReplenishmentPanel';
 import NetworkPanel from '../shared/NetworkPanel';
 import MarginEnginePanel from '../shared/MarginEnginePanel';
 import DisruptionPanel from '../shared/DisruptionPanel';
 import LedgerPanel from '../shared/LedgerPanel';
+import StrategyPanel from '../shared/StrategyPanel';
 
 export default function ClientLayout() {
   return (
     <div className="dashboard-shell">
       <Sidebar role="client" />
       <div className="main-area">
-        <LiveAiBar />
         <div className="panel-scroll">
           <Routes>
             <Route index element={<Navigate to="command" replace />} />
@@ -23,6 +22,7 @@ export default function ClientLayout() {
             <Route path="margin" element={<MarginEnginePanel />} />
             <Route path="disruption" element={<DisruptionPanel />} />
             <Route path="ledger" element={<LedgerPanel />} />
+            <Route path="strategy" element={<StrategyPanel />} />
             <Route path="*" element={<Navigate to="command" replace />} />
           </Routes>
         </div>

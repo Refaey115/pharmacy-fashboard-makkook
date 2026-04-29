@@ -5,8 +5,8 @@
 // ── Network Scale ─────────────────────────────────────────────────────────────
 export const BRANCHES_COUNT          = 500;
 export const SKUS_COUNT              = 70_247;
-export const DECISIONS_PER_DAY      = 35_100_000;   // 500 × 70,247 × 1
-export const DECISIONS_EXECUTED_DAY =    38_000;    // executed (non-no-action)
+export const DECISIONS_PER_DAY      = 35_100_000;   // 500 × 70,247 × ~10 cycles
+export const DECISIONS_EXECUTED_DAY =     3_510;    // actual orders/transfers executed (~0.01% of evaluations)
 
 // ── Revenue Base ──────────────────────────────────────────────────────────────
 export const ANNUAL_REVENUE_USD      = 1_040_000_000; // $1.04B

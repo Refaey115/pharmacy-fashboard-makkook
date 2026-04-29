@@ -1,0 +1,289 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Page header ──────────────────────────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pageTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.pageSub {
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 640px;
+}
+
+.activeBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(225,84,29,0.1);
+  border: 1px solid rgba(225,84,29,0.3);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@keyframes activePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+.activeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: activePulse 1.8s ease-in-out infinite;
+}
+
+/* ── Preset buttons ───────────────────────────────────────────────────────── */
+.presetRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.presetBtn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.presetBtn:hover {
+  border-color: rgba(225,84,29,0.4);
+  background: rgba(225,84,29,0.04);
+}
+
+.presetBtn.presetActive {
+  border-color: var(--accent);
+  background: rgba(225,84,29,0.08);
+  box-shadow: 0 0 0 1px rgba(225,84,29,0.2), 0 4px 16px rgba(225,84,29,0.12);
+}
+
+.presetIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.presetText { display: flex; flex-direction: column; gap: 3px; }
+.presetLabel { font-size: 13px; font-weight: 700; color: var(--text); }
+.presetDesc  { font-size: 11px; color: var(--text-3); line-height: 1.4; }
+
+/* ── Main 3-column grid ───────────────────────────────────────────────────── */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* shared card base */
+.slidersCard,
+.radarCard,
+.tradeoffCard,
+.barCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.cardSub {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 16px;
+}
+
+/* ── Sliders ──────────────────────────────────────────────────────────────── */
+.sliderList { display: flex; flex-direction: column; gap: 18px; }
+
+.sliderRow { display: flex; flex-direction: column; gap: 6px; }
+
+.sliderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sliderLabel { font-size: 12px; color: var(--text-2); font-weight: 500; }
+.sliderVal   { font-size: 13px; font-weight: 700; font-family: 'JetBrains Mono','Courier New',monospace; }
+
+.sliderTrack {
+  position: relative;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.sliderFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.05s linear;
+  pointer-events: none;
+}
+
+.sliderInput {
+  position: absolute;
+  inset: -6px 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+  height: 20px;
+  margin: 0;
+}
+
+.totalBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.totalLabel { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; }
+.totalVal   { font-size: 18px; font-weight: 700; color: var(--text); font-family: 'JetBrains Mono','Courier New',monospace; }
+.totalMax   { font-size: 12px; color: var(--text-3); font-weight: 400; }
+
+/* ── Tradeoff metrics ─────────────────────────────────────────────────────── */
+.tradeoffGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.tradeoffItem {
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 12px 10px;
+  text-align: center;
+}
+
+.tradeoffValue {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono','Courier New',monospace;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.tradeoffLabel {
+  font-size: 10px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+
+.tradeoffDelta {
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono','Courier New',monospace;
+}
+
+/* ── Bar card ─────────────────────────────────────────────────────────────── */
+.barCard { }
+
+/* ── Narrative row ────────────────────────────────────────────────────────── */
+.narrativeRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.narrativeCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.narrativeTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.narrativeText {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.7;
+}
+
+.tradeoffList { display: flex; flex-direction: column; gap: 10px; }
+
+.tradeoffRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  border-left: 2px solid var(--border);
+}
+
+.tradeoffRowLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.tradeoffRowEffect {
+  font-size: 11px;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .mainGrid { grid-template-columns: 1fr 1fr; }
+  .radarCard { grid-column: span 2; }
+  .presetRow { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .mainGrid     { grid-template-columns: 1fr; }
+  .radarCard    { grid-column: auto; }
+  .presetRow    { grid-template-columns: 1fr 1fr; }
+  .narrativeRow { grid-template-columns: 1fr; }
+  .pageHeader   { flex-direction: column; }
+}

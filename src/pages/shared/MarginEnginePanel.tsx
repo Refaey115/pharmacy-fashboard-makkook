@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
+import type { ChartData } from 'chart.js';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,6 +8,7 @@ import {
   PointElement,
   LineElement,
   BarElement,
+  Filler,
   Tooltip,
   Legend,
 } from 'chart.js';
@@ -25,7 +27,26 @@ import {
 import { formatUSD } from '../../utils/formatCurrency';
 import styles from './MarginEnginePanel.module.css';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Tooltip, Legend);
+
+// Gradient plugin — runs before each draw to inject canvas gradients
+const gradientPlugin = {
+  id: 'areaGradient',
+  beforeDatasetsDraw(chart: ChartJS) {
+    const { ctx, chartArea } = chart;
+    if (!chartArea) return;
+    const { top, bottom } = chartArea;
+    (chart.data.datasets as unknown as Array<Record<string, unknown>>).forEach(ds => {
+      if (!ds['_g0'] || !ds['_g1']) return;
+      const g = ctx.createLinearGradient(0, top, 0, bottom);
+      g.addColorStop(0,   ds['_g0'] as string);
+      g.addColorStop(0.5, ds['_g0'] as string);
+      g.addColorStop(1,   ds['_g1'] as string);
+      ds['backgroundColor'] = g;
+    });
+  },
+};
+ChartJS.register(gradientPlugin);
 
 interface ChainNode {
   label: string;
@@ -80,34 +101,70 @@ export default function MarginEnginePanel() {
       {
         label: 'Sales Cycle (days)',
         data: cycleDays,
-        borderColor: 'var(--err)',
-        backgroundColor: 'rgba(248,113,113,0.08)',
+        borderColor: '#f87171',
+        backgroundColor: 'rgba(248,113,113,0.18)',
         yAxisID: 'y',
-        tension: 0.4,
-        pointRadius: 3,
+        tension: 0.48,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 7,
+        borderWidth: 2.5,
+        pointBackgroundColor: '#f87171',
+        pointBorderColor: 'rgba(248,113,113,0.3)',
+        pointBorderWidth: 2,
+        _g0: 'rgba(248,113,113,0.35)',
+        _g1: 'rgba(248,113,113,0.02)',
       },
       {
         label: 'Gross Margin (%)',
         data: marginPct,
-        borderColor: 'var(--ok)',
-        backgroundColor: 'rgba(74,222,128,0.08)',
+        borderColor: '#4ade80',
+        backgroundColor: 'rgba(74,222,128,0.18)',
         yAxisID: 'y2',
-        tension: 0.4,
-        pointRadius: 3,
+        tension: 0.48,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 7,
+        borderWidth: 2.5,
+        pointBackgroundColor: '#4ade80',
+        pointBorderColor: 'rgba(74,222,128,0.3)',
+        pointBorderWidth: 2,
+        _g0: 'rgba(74,222,128,0.35)',
+        _g1: 'rgba(74,222,128,0.02)',
       },
     ],
-  };
+  } as unknown as ChartData<'line'>;
 
   const trendOptions = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: { mode: 'index' as const, intersect: false },
+    animation: { duration: 800, easing: 'easeInOutQuart' as const },
     plugins: {
-      legend: { labels: { color: '#9B9B9B', font: { size: 11 as const } } },
-      tooltip: { backgroundColor: '#1a1a1a', titleColor: '#EFEFEF', bodyColor: '#C6C6C6' },
+      legend: {
+        labels: {
+          color: '#9B9B9B',
+          font: { size: 11 as const },
+          usePointStyle: true,
+          pointStyleWidth: 12,
+        },
+      },
+      tooltip: {
+        backgroundColor: 'rgba(18,18,18,0.95)',
+        titleColor: '#EFEFEF',
+        bodyColor: '#C6C6C6',
+        borderColor: 'rgba(225,84,29,0.3)',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 8,
+      },
     },
     scales: {
-      x: { ticks: { color: '#9B9B9B', font: { size: 10 as const } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      x: {
+        ticks: { color: '#9B9B9B', font: { size: 10 as const } },
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        border: { display: false },
+      },
       y: {
         type: 'linear' as const,
         position: 'left' as const,
@@ -116,6 +173,7 @@ export default function MarginEnginePanel() {
         title: { display: true, text: 'Sales Cycle (days)', color: '#9B9B9B', font: { size: 10 as const } },
         ticks: { color: '#9B9B9B', font: { size: 10 as const } },
         grid: { color: 'rgba(255,255,255,0.04)' },
+        border: { display: false },
       },
       y2: {
         type: 'linear' as const,
@@ -125,6 +183,7 @@ export default function MarginEnginePanel() {
         title: { display: true, text: 'Gross Margin (%)', color: '#9B9B9B', font: { size: 10 as const } },
         ticks: { color: '#9B9B9B', font: { size: 10 as const } },
         grid: { drawOnChartArea: false },
+        border: { display: false },
       },
     },
   } as const;
@@ -135,8 +194,22 @@ export default function MarginEnginePanel() {
       {
         label: 'Value ($M)',
         data: ANNUAL_VALUE_DATA,
-        backgroundColor: ['rgba(225,84,29,0.85)', 'rgba(74,222,128,0.7)', 'rgba(96,165,250,0.7)', 'rgba(167,139,250,0.7)', 'rgba(245,158,11,0.7)'],
-        borderRadius: 4,
+        backgroundColor: [
+          'rgba(225,84,29,0.9)',
+          'rgba(74,222,128,0.8)',
+          'rgba(96,165,250,0.8)',
+          'rgba(167,139,250,0.8)',
+          'rgba(245,158,11,0.8)',
+        ],
+        borderRadius: 8,
+        borderSkipped: false,
+        hoverBackgroundColor: [
+          'rgba(225,84,29,1)',
+          'rgba(74,222,128,1)',
+          'rgba(96,165,250,1)',
+          'rgba(167,139,250,1)',
+          'rgba(245,158,11,1)',
+        ],
       },
     ],
   };
@@ -145,19 +218,33 @@ export default function MarginEnginePanel() {
     indexAxis: 'y' as const,
     responsive: true,
     maintainAspectRatio: false,
+    animation: { duration: 1000, easing: 'easeInOutQuart' as const },
     plugins: {
       legend: { display: false },
-      tooltip: { backgroundColor: '#1a1a1a', titleColor: '#EFEFEF', bodyColor: '#C6C6C6' },
+      tooltip: {
+        backgroundColor: 'rgba(18,18,18,0.95)',
+        titleColor: '#EFEFEF',
+        bodyColor: '#C6C6C6',
+        borderColor: 'rgba(225,84,29,0.3)',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: {
+          label: (ctx: { parsed: { x: number | null } }) => ` $${ctx.parsed.x ?? 0}M`,
+        },
+      },
     },
     scales: {
       x: {
         ticks: { color: '#9B9B9B', font: { size: 10 as const } },
         grid: { color: 'rgba(255,255,255,0.04)' },
-        title: { display: true, text: '$M', color: '#9B9B9B', font: { size: 10 as const } },
+        border: { display: false },
+        title: { display: true, text: 'USD ($M)', color: '#9B9B9B', font: { size: 10 as const } },
       },
       y: {
         ticks: { color: '#9B9B9B', font: { size: 10 as const } },
         grid: { color: 'rgba(255,255,255,0.04)' },
+        border: { display: false },
       },
     },
   } as const;

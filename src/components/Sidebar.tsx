@@ -14,6 +14,7 @@ function buildNav(base: string): NavItem[] {
     { label: 'Margin Engine',       path: `${base}/margin`       },
     { label: 'Disruption Response', path: `${base}/disruption`   },
     { label: 'Decision Ledger',     path: `${base}/ledger`       },
+    { label: 'Strategy Control',    path: `${base}/strategy`     },
   ];
 }
 

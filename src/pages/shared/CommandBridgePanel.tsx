@@ -61,7 +61,7 @@ export default function CommandBridgePanel() {
   return (
     <div className={styles.panel}>
       {/* Hero strip */}
-      <SpeakerHint text="Pause here 5 seconds. Let the numbers land. 35.1 million decisions processed today — ask the room: how many staff would that take?">
+      <SpeakerHint text="These are live network metrics. 35.1M is the total inventory positions evaluated across all branches and SKUs today across all replenishment cycles.">
         <div className={styles.hero}>
           <div className={styles.heroGrid}>
             <div className={styles.heroStat}>
@@ -75,23 +75,20 @@ export default function CommandBridgePanel() {
             <div className={styles.heroStat}>
               <div className={styles.heroNumber}>
                 <ShowMath
-                  formula="branches × active SKUs × 1 daily evaluation cycle"
+                  formula="branches × active SKUs × replenishment cycles/day"
                   inputs={[
                     { label: 'Branches', value: '500' },
                     { label: 'Active SKUs', value: '70,247' },
-                    { label: 'Eval cycles/day', value: '1' },
+                    { label: 'Cycles/day', value: '~10' },
                   ]}
-                  output="35,123,500 decisions/day"
+                  output="~35.1M inventory positions evaluated/day"
                   source="Standard multi-echelon replenishment evaluation model"
                 >
                   {decisionStr}
                 </ShowMath>
               </div>
-              <div className={styles.heroLabel}>AI Decisions Today</div>
+              <div className={styles.heroLabel}>Inventory Positions Evaluated Today</div>
             </div>
-          </div>
-          <div className={styles.heroSubtext}>
-            Makkook DIOS — Decision Intelligence Operating System — managing the network in real time
           </div>
         </div>
       </SpeakerHint>
